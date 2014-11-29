@@ -14,7 +14,7 @@ source(Filename.Header)
 
 
 ########################################################################
-## Data 1                                                          ##
+## Data Input                                                         ##
 ########################################################################
 Filename.Data1 <- paste('~/Honey/BKPAI/BKPAI.csv')
 Data <- read.csv(file=Filename.Data1, header=FALSE, nrows=1000,
@@ -24,3 +24,13 @@ Data <- read.csv(file=Filename.Data1, header=FALSE, nrows=1000,
 colnames(Data) <- Data[1,]
 str(Data)
 Data <- Data[-1,]
+
+########################################################################
+## Basic understanding of the dataset                                 ##
+########################################################################
+length(unique(Data$iuid))
+length(unique(Data$vhhno))
+
+nrow(subset(Data, iuid=='0'))
+View(subset(Data, iuid=='0'))
+
