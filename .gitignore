@@ -1,0 +1,9 @@
+*~
+tmp
+backup_linux
+*.pdf
+.Rhistory
+*.csv
+*.txt
+*.xlsx
+*.Rdata
