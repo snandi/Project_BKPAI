@@ -11,7 +11,7 @@ rm(list=objects(all.names=TRUE))
 ########################################################################
 Filename.Header <- paste('~/RScripts/HeaderFile_Nandi.R', sep='')
 source(Filename.Header)
-RScriptPath <- '~/Honey/BKPAI/RScripts_BKPAI/'
+RScriptPath <- '~/Project_BKPAI/RScripts_BKPAI/'
 source(paste(RScriptPath, 'fn_Library_BKPAI.R', sep=''))
 
 ########################################################################
