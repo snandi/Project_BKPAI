@@ -141,3 +141,18 @@ qplot(x=live_arrange_max, y=log(total_edu+1), data=Data1) + geom_boxplot()
 table(Data1$HH_head60)
 table(Data1$live_arrange_max, Data1$HH_head60)
 qplot(HH_head60, data=Data1, geom="bar", fill=factor(live_arrange_max))
+
+## transfer_child_mx
+table(Data1$transfer_child_mx)
+table(Data1$live_arrange_max, Data1$transfer_child_mx)
+round(prop.table(x = table(Data1$transfer_child_mx, Data1$live_arrange_max), margin=1), 2)
+round(prop.table(x = table(Data1$transfer_child_mx, Data1$live_arrange_max), margin=1), 2)
+
+## caste
+table(Data1$caste)
+t(table(Data1$live_arrange_max, Data1$caste))
+round(prop.table(x = table(Data1$caste, Data1$live_arrange_max), margin=1), 2)
+
+## avg_edu_adult
+summary(Data1$avg_edu_adult)
+qplot(x=live_arrange_max, y=log(avg_edu_adult+1), data=Data1) + geom_boxplot()
