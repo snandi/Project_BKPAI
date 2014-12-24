@@ -76,6 +76,7 @@ Varlist <- c('uid',
 
 Data1 <- Data[,Varlist]
 str(Data1)
+levels(Data1$live_arrange_max)[4] <- 'with children'
 
 ## Education
 summary(Data1$education)
@@ -106,38 +107,72 @@ dev.off()
 summary(Data1$poor_health)
 Table.poor_health <- prop.table(table(Data1$poor_health,Data1$live_arrange_max),1)
 Table.poor_health.r <- melt(Table.poor_health, id=rownames(Table.poor_health))
+table(Data1$poor_health,Data1$live_arrange_max)
+Test.poor_health <- chisq.test(table(Data1$poor_health,Data1$live_arrange_max))
+xtable(as.data.frame(cbind(X_Sq=Test.poor_health$statistic, 
+                           DF=Test.poor_health$parameter, 
+                           pvalue=Test.poor_health$p.value)))
 
 ## row_total_income
 summary(Data1$row_total_income)
-qplot(x=live_arrange_max, y=log(row_total_income + 1), data=Data1) + geom_boxplot()
+hist(log(Data1$row_total_income))
+Plot2 <- qplot(x=live_arrange_max, y=log(row_total_income + 1), data=Data1) + 
+  geom_boxplot() + 
+  xlab(label = 'Living Arrangement') + ylab('log(row_total_income)')
+jpeg("Row_Total_Income.jpg")
+Plot2
+dev.off()
 
 ## depend_child_mx
-summary(Data1$depend_child_mx)
+table(Data1$depend_child_mx)
 table(Data1$depend_child_mx, Data1$live_arrange_max)
-qplot(live_arrange_max, data=Data1, geom="bar", fill=depend_child_mx)
+Test.depend_child_mx <- chisq.test(table(Data1$depend_child_mx, Data1$live_arrange_max))
+xtable(as.data.frame(cbind(X_Sq=Test.depend_child_mx$statistic, 
+                           DF=Test.depend_child_mx$parameter, 
+                           pvalue=Test.depend_child_mx$p.value)))
+Plot3 <- qplot(live_arrange_max, data=Data1, geom="bar", fill=depend_child_mx)
+jpeg("Depend_Child_Mx.jpg")
+Plot3
+dev.off()
 
 ## own_asset
+Data1$own_asset <- as.factor(Data1$own_asset)
 table(Data1$own_asset)
 table(Data1$live_arrange_max, Data1$own_asset)
 prop.table(x = table(Data1$live_arrange_max, Data1$own_asset), margin=2)
-qplot(live_arrange_max, data=Data1, geom="bar", fill=factor(own_asset))
+Test.own_asset <- chisq.test(table(Data1$own_asset, Data1$live_arrange_max))
+xtable(as.data.frame(cbind(X_Sq=Test.own_asset$statistic, 
+                           DF=Test.own_asset$parameter, 
+                           pvalue=Test.own_asset$p.value)))
+
 
 ## religion
-summary(Data1$religion)
+table(Data1$religion)
 table(Data1$live_arrange_max, Data1$religion)
-prop.table(x = table(Data1$religion, Data1$live_arrange_max), margin=1)
-qplot(religion, data=Data1, geom="bar", fill=factor(live_arrange_max))
+xtable(prop.table(x = table(Data1$religion, Data1$live_arrange_max), margin=1))
+Test.religion <- chisq.test(table(Data1$religion, Data1$live_arrange_max))
+xtable(as.data.frame(cbind(X_Sq=Test.religion$statistic, 
+                           DF=Test.religion$parameter, 
+                           pvalue=Test.religion$p.value)), digits=c(0, 2, 0, 4))
 
 ## disability_mx
 table(Data1$disability_mx)
 table(Data1$live_arrange_max, Data1$disability_mx)
 prop.table(x = table(Data1$disability_mx, Data1$live_arrange_max), margin=1)
+Test.disability_mx <- chisq.test(table(Data1$disability_mx, Data1$live_arrange_max))
+xtable(as.data.frame(cbind(X_Sq=Test.disability_mx$statistic, 
+                           DF=Test.disability_mx$parameter, 
+                           pvalue=Test.disability_mx$p.value)), digits=c(0, 2, 0, 4))
 
 ## work_adult
-table(Data1$work_adult)
+t(table(Data1$work_adult))
 table(Data1$live_arrange_max, Data1$work_adult)
 qplot(work_adult, data=Data1, geom="bar", fill=factor(live_arrange_max))
 qplot(live_arrange_max, data=Data1, geom="bar", fill=factor(work_adult))
+Test.work_adult <- chisq.test(table(Data1$work_adult, Data1$live_arrange_max))
+xtable(as.data.frame(cbind(X_Sq=Test.work_adult$statistic, 
+                           DF=Test.work_adult$parameter, 
+                           pvalue=Test.work_adult$p.value)), digits=c(0, 2, 0, 4))
 
 ## total_edu
 summary(Data1$total_edu)
@@ -153,6 +188,10 @@ table(Data1$transfer_child_mx)
 table(Data1$live_arrange_max, Data1$transfer_child_mx)
 round(prop.table(x = table(Data1$transfer_child_mx, Data1$live_arrange_max), margin=1), 2)
 round(prop.table(x = table(Data1$transfer_child_mx, Data1$live_arrange_max), margin=1), 2)
+Test.transfer_child_mx <- chisq.test(table(Data1$transfer_child_mx, Data1$live_arrange_max))
+xtable(as.data.frame(cbind(X_Sq=Test.transfer_child_mx$statistic, 
+                           DF=Test.transfer_child_mx$parameter, 
+                           pvalue=Test.transfer_child_mx$p.value)), digits=c(0, 2, 0, 4))
 
 ## caste
 table(Data1$caste)

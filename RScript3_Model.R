@@ -9,13 +9,14 @@ rm(list=objects(all.names=TRUE))
 ########################################################################
 ## Run Header files                                                   ##
 ########################################################################
-#Filename.Header <- paste('~/RScripts/HeaderFile_Nandi.R', sep='')
-Filename.Header <- paste('S:/RScripts/HeaderFile_Nandi.R', sep='')
+Filename.Header <- paste('~/RScripts/HeaderFile_Nandi.R', sep='')
+#Filename.Header <- paste('S:/RScripts/HeaderFile_Nandi.R', sep='')
 source(Filename.Header)
-#RScriptPath <- '~/Project_BKPAI/RScripts_BKPAI/'
-RScriptPath <- 'S:/Stat/Stat_Consulting/Project_BKPAI/RScripts_BKPAI/'
+RScriptPath <- '~/Project_BKPAI/RScripts_BKPAI/'
+#RScriptPath <- 'S:/Stat/Stat_Consulting/Project_BKPAI/RScripts_BKPAI/'
 source(paste(RScriptPath, 'fn_Library_BKPAI.R', sep=''))
-ProjectPath <- 'S:/Stat/Stat_Consulting/Project_BKPAI/'
+ProjectPath <- '~/Stat/Stat_Consulting/Project_BKPAI/'
+#ProjectPath <- 'S:/Stat/Stat_Consulting/Project_BKPAI/'
 
 ########################################################################
 ## Data Input                                                         ##
@@ -62,6 +63,7 @@ str(Data1)
 ########################################################################
 ## First Multinomial model                                            ##
 ########################################################################
+PValues <- NULL
 Model1 <- multinom(live_arrange_max ~ poor_health + depend_child_mx + own_asset + 
                      transfer_child_mx + disability_mx + work_adult + caste + religion, 
                    data=Data1)
@@ -69,19 +71,78 @@ Model1 <- multinom(live_arrange_max ~ poor_health + depend_child_mx + own_asset 
 Model1.1 <- multinom(live_arrange_max ~ depend_child_mx + own_asset + 
                      transfer_child_mx + disability_mx + work_adult + caste + religion, 
                    data=Data1)
-
 pchisq(deviance(Model1.1) - deviance(Model1), 
        Model1$edf - Model1.1$edf, lower=F)
-
+PValues <- rbind(PValues, cbind(Variable='poor_health', 
+                               pValue=pchisq(deviance(Model1.1) - deviance(Model1), 
+                                             Model1$edf - Model1.1$edf, lower=F))
+)
 
 Model1.2 <- multinom(live_arrange_max ~ poor_health + own_asset + 
                        transfer_child_mx + disability_mx + work_adult + caste + religion, 
                      data=Data1)
-pchisq(deviance(Model1.2) - deviance(Model1), 
-       Model1$edf - Model1.2$edf, lower=F)
+pchisq(deviance(Model1.2) - deviance(Model1), Model1$edf - Model1.2$edf, lower=F)
+PValues <- rbind(PValues, cbind(Variable='depend_child_max', 
+                                pValue=pchisq(deviance(Model1.2) - deviance(Model1), 
+                                              Model1$edf - Model1.2$edf, lower=F)))
 
 Model1.3 <- multinom(live_arrange_max ~ poor_health + depend_child_mx + 
                        transfer_child_mx + disability_mx + work_adult + caste + religion, 
                      data=Data1)
 pchisq(deviance(Model1.3) - deviance(Model1), 
        Model1$edf - Model1.3$edf, lower=F)
+PValues <- rbind(PValues, cbind(Variable='own_asset', 
+                                pValue=pchisq(deviance(Model1.3) - deviance(Model1), 
+                                              Model1$edf - Model1.3$edf, lower=F)))
+
+Model1.4 <- multinom(live_arrange_max ~ poor_health + depend_child_mx + own_asset +
+                       disability_mx + work_adult + caste + religion, 
+                     data=Data1)
+pchisq(deviance(Model1.4) - deviance(Model1), 
+       Model1$edf - Model1.4$edf, lower=F)
+PValues <- rbind(PValues, cbind(Variable='transfer_child_max', 
+                                pValue=pchisq(deviance(Model1.4) - deviance(Model1), 
+                                              Model1$edf - Model1.4$edf, lower=F)))
+
+Model1.5 <- multinom(live_arrange_max ~ poor_health + depend_child_mx + own_asset +
+                       work_adult + caste + religion, 
+                     data=Data1)
+pchisq(deviance(Model1.5) - deviance(Model1), 
+       Model1$edf - Model1.5$edf, lower=F)
+PValues <- rbind(PValues, cbind(Variable='disability_mx', 
+                                pValue=pchisq(deviance(Model1.5) - deviance(Model1), 
+                                              Model1$edf - Model1.5$edf, lower=F)))
+
+Model1.6 <- multinom(live_arrange_max ~ poor_health + depend_child_mx + own_asset +
+                       disability_mx + caste + religion, 
+                     data=Data1)
+pchisq(deviance(Model1.6) - deviance(Model1), 
+       Model1$edf - Model1.6$edf, lower=F)
+PValues <- rbind(PValues, cbind(Variable='work_adult', 
+                                pValue=pchisq(deviance(Model1.6) - deviance(Model1), 
+                                              Model1$edf - Model1.6$edf, lower=F)))
+
+Model1.7 <- multinom(live_arrange_max ~ poor_health + depend_child_mx + own_asset +
+                       disability_mx + work_adult + religion, 
+                     data=Data1)
+pchisq(deviance(Model1.7) - deviance(Model1), 
+       Model1$edf - Model1.7$edf, lower=F)
+PValues <- rbind(PValues, cbind(Variable='caste', 
+                                pValue=pchisq(deviance(Model1.7) - deviance(Model1), 
+                                              Model1$edf - Model1.7$edf, lower=F)))
+
+Model1.8 <- multinom(live_arrange_max ~ poor_health + depend_child_mx + own_asset +
+                       disability_mx + work_adult + caste, 
+                     data=Data1)
+pchisq(deviance(Model1.8) - deviance(Model1), 
+       Model1$edf - Model1.8$edf, lower=F)
+PValues <- rbind(PValues, cbind(Variable='religion', 
+                                pValue=pchisq(deviance(Model1.8) - deviance(Model1), 
+                                              Model1$edf - Model1.8$edf, lower=F)))
+
+PValues <- as.data.frame(PValues, stringsAsFactors=F)
+PValues$pValue <- as.numeric(PValues$pValue)
+
+PValues[order(PValues$pValue),]
+print(xtable(PValues[order(PValues$pValue),], digits=6), include.rownames=FALSE)
+

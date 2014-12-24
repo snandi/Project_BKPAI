@@ -1,5 +1,5 @@
 %\documentclass[11pt]{extarticle} %extarticle for fontsizes other than 10, 11 And 12
-\documentclass[11p]{article}
+\documentclass[11pt]{article}
 
 %%%%%%%%%%%%%%%%%%%%%%%% Packages %%%%%%%%%%%%%%%%%%%%%%%%
 \usepackage{amscd}
@@ -101,11 +101,326 @@
 December 24, 2014
 \end{center}
 
-Response variable: $live\_arrange\_max$
-
-\subsection {Wealth quintile}
+\subsection*{Wealth quintile}
+\begin{center}
 \includegraphics{BasicAnalysis_2014-12-24-002}
+\end{center}
+Interpretation of this figure is that $60\%$ people in wealth quintile 1, live with children, whereas about $85\%$ people in wealth quintiles 4 and 5 live with children.
 
+\newpage
+\subsection*{Poor Health}
+Frequency of the Poor health variable:
+\begin{Schunk}
+\begin{Soutput}
+  healthy adults unhealthy adults 
+            3390             4516 
+\end{Soutput}
+\end{Schunk}
+Now, lets check for independence between Poor health and living arrangement:
+\begin{Schunk}
+\begin{Soutput}
+                   others alone spouse only with children
+  healthy adults      103   250         460          2577
+  unhealthy adults    201   313         516          3486
+\end{Soutput}
+\end{Schunk}
+
+% latex table generated in R 3.1.1 by xtable 1.7-4 package
+% Wed Dec 24 16:32:13 2014
+\begin{table}[ht]
+\centering
+\begin{tabular}{rrrr}
+  \hline
+ & X\_Sq & DF & pvalue \\ 
+  \hline
+X-squared & 18.14 & 3 & 0.000 \\ 
+   \hline
+\end{tabular}
+\end{table}Conclusion: $\chi^2$ test rejects the null hypothesis of independence between poor health and living arrangement. 
+
+\newpage
+\subsection*{Total Income}
+\begin{center}
+\includegraphics{BasicAnalysis_2014-12-24-006}
+\end{center}
+Since the variability in the $row\_total\_income$ is too high, the boxplot of the $\log$ of the variable is displayed. The living arrangement with ``spouse-only'' seems to have highest average income. There are lot of aging adults with no income in the first and fourth type of living arrangement.
+
+
+\newpage
+\subsection*{Depend Child ($depend\_child\_mx$)}
+% latex table generated in R 3.1.1 by xtable 1.7-4 package
+% Wed Dec 24 16:32:14 2014
+\begin{table}[ht]
+\centering
+\begin{tabular}{rrr}
+  \hline
+ & no & yes \\ 
+  \hline
+1 & 3335 & 4585 \\ 
+   \hline
+\end{tabular}
+\end{table}% latex table generated in R 3.1.1 by xtable 1.7-4 package
+% Wed Dec 24 16:32:14 2014
+\begin{table}[ht]
+\centering
+\begin{tabular}{rrrrr}
+  \hline
+ & others & alone & spouse only & with children \\ 
+  \hline
+no & 206 & 398 & 742 & 1989 \\ 
+  yes &  98 & 167 & 234 & 4086 \\ 
+   \hline
+\end{tabular}
+\end{table}Now, lets check for independence between depend child and living arrangement:
+% latex table generated in R 3.1.1 by xtable 1.7-4 package
+% Wed Dec 24 16:32:14 2014
+\begin{table}[ht]
+\centering
+\begin{tabular}{rrrr}
+  \hline
+ & X\_Sq & DF & pvalue \\ 
+  \hline
+X-squared & 947.39 & 3 & 0.000 \\ 
+   \hline
+\end{tabular}
+\end{table}
+\begin{center}
+\includegraphics{BasicAnalysis_2014-12-24-009}
+\end{center}
+
+\newpage
+\subsection*{Own Asset}
+
+% latex table generated in R 3.1.1 by xtable 1.7-4 package
+% Wed Dec 24 16:32:14 2014
+\begin{table}[ht]
+\centering
+\begin{tabular}{rrr}
+  \hline
+ & 0 & 1 \\ 
+  \hline
+1 & 1514 & 6406 \\ 
+   \hline
+\end{tabular}
+\end{table}% latex table generated in R 3.1.1 by xtable 1.7-4 package
+% Wed Dec 24 16:32:14 2014
+\begin{table}[ht]
+\centering
+\begin{tabular}{rrr}
+  \hline
+ & 0 & 1 \\ 
+  \hline
+others &  70 & 234 \\ 
+  alone & 115 & 450 \\ 
+  spouse only & 117 & 859 \\ 
+  with children & 1212 & 4863 \\ 
+   \hline
+\end{tabular}
+\end{table}% latex table generated in R 3.1.1 by xtable 1.7-4 package
+% Wed Dec 24 16:32:14 2014
+\begin{table}[ht]
+\centering
+\begin{tabular}{rrrr}
+  \hline
+ & X\_Sq & DF & pvalue \\ 
+  \hline
+X-squared & 38.38 & 3 & 0.000 \\ 
+   \hline
+\end{tabular}
+\end{table}Conclusion: $\chi^2$ test rejects the null hypothesis of independence between asset ownership and living arrangement. 
+
+\newpage
+\subsection*{religion}
+% latex table generated in R 3.1.1 by xtable 1.7-4 package
+% Wed Dec 24 16:32:14 2014
+\begin{table}[ht]
+\centering
+\begin{tabular}{rrrrrr}
+  \hline
+ & hindu & muslim & christian & sikh & other \\ 
+  \hline
+1 & 6272 & 680 & 268 & 600 & 100 \\ 
+   \hline
+\end{tabular}
+\end{table}% latex table generated in R 3.1.1 by xtable 1.7-4 package
+% Wed Dec 24 16:32:14 2014
+\begin{table}[ht]
+\centering
+\begin{tabular}{rrrrr}
+  \hline
+ & others & alone & spouse only & with children \\ 
+  \hline
+hindu & 0.03 & 0.08 & 0.13 & 0.76 \\ 
+  muslim & 0.06 & 0.06 & 0.06 & 0.83 \\ 
+  christian & 0.06 & 0.07 & 0.16 & 0.71 \\ 
+  sikh & 0.05 & 0.03 & 0.11 & 0.81 \\ 
+  other & 0.01 & 0.09 & 0.13 & 0.77 \\ 
+   \hline
+\end{tabular}
+\end{table}% latex table generated in R 3.1.1 by xtable 1.7-4 package
+% Wed Dec 24 16:32:14 2014
+\begin{table}[ht]
+\centering
+\begin{tabular}{rrrr}
+  \hline
+ & X\_Sq & DF & pvalue \\ 
+  \hline
+X-squared & 70.39 & 12 & 0.0000 \\ 
+   \hline
+\end{tabular}
+\end{table}Conclusion: $\chi^2$ test rejects the null hypothesis of independence between religion and living arrangement. 
+
+\newpage
+\subsection*{Disability ($disability\_mx$)}
+% latex table generated in R 3.1.1 by xtable 1.7-4 package
+% Wed Dec 24 16:32:14 2014
+\begin{table}[ht]
+\centering
+\begin{tabular}{rrr}
+  \hline
+ & no & yes \\ 
+  \hline
+1 & 1905 & 6015 \\ 
+   \hline
+\end{tabular}
+\end{table}% latex table generated in R 3.1.1 by xtable 1.7-4 package
+% Wed Dec 24 16:32:14 2014
+\begin{table}[ht]
+\centering
+\begin{tabular}{rrr}
+  \hline
+ & no & yes \\ 
+  \hline
+others &  59 & 245 \\ 
+  alone & 174 & 391 \\ 
+  spouse only & 316 & 660 \\ 
+  with children & 1356 & 4719 \\ 
+   \hline
+\end{tabular}
+\end{table}% latex table generated in R 3.1.1 by xtable 1.7-4 package
+% Wed Dec 24 16:32:14 2014
+\begin{table}[ht]
+\centering
+\begin{tabular}{rrrr}
+  \hline
+ & X\_Sq & DF & pvalue \\ 
+  \hline
+X-squared & 64.65 & 3 & 0.0000 \\ 
+   \hline
+\end{tabular}
+\end{table}Conclusion: $\chi^2$ test rejects the null hypothesis of independence between disability and living arrangement. 
+
+\newpage
+\subsection*{Work Adult}
+% latex table generated in R 3.1.1 by xtable 1.7-4 package
+% Wed Dec 24 16:32:14 2014
+\begin{table}[ht]
+\centering
+\begin{tabular}{rrr}
+  \hline
+ & no & yes \\ 
+  \hline
+1 & 5629 & 2291 \\ 
+   \hline
+\end{tabular}
+\end{table}% latex table generated in R 3.1.1 by xtable 1.7-4 package
+% Wed Dec 24 16:32:15 2014
+\begin{table}[ht]
+\centering
+\begin{tabular}{rrr}
+  \hline
+ & no & yes \\ 
+  \hline
+others & 222 &  82 \\ 
+  alone & 391 & 174 \\ 
+  spouse only & 554 & 422 \\ 
+  with children & 4462 & 1613 \\ 
+   \hline
+\end{tabular}
+\end{table}% latex table generated in R 3.1.1 by xtable 1.7-4 package
+% Wed Dec 24 16:32:15 2014
+\begin{table}[ht]
+\centering
+\begin{tabular}{rrrr}
+  \hline
+ & X\_Sq & DF & pvalue \\ 
+  \hline
+X-squared & 115.42 & 3 & 0.0000 \\ 
+   \hline
+\end{tabular}
+\end{table}Conclusion: $\chi^2$ test rejects the null hypothesis of independence between working adult and living arrangement. 
+
+\newpage
+\subsection*{Transfer child}
+% latex table generated in R 3.1.1 by xtable 1.7-4 package
+% Wed Dec 24 16:32:15 2014
+\begin{table}[ht]
+\centering
+\begin{tabular}{rrr}
+  \hline
+ & no & yes \\ 
+  \hline
+1 & 7495 & 425 \\ 
+   \hline
+\end{tabular}
+\end{table}% latex table generated in R 3.1.1 by xtable 1.7-4 package
+% Wed Dec 24 16:32:15 2014
+\begin{table}[ht]
+\centering
+\begin{tabular}{rrr}
+  \hline
+ & no & yes \\ 
+  \hline
+others & 286 &  18 \\ 
+  alone & 529 &  36 \\ 
+  spouse only & 927 &  49 \\ 
+  with children & 5753 & 322 \\ 
+   \hline
+\end{tabular}
+\end{table}% latex table generated in R 3.1.1 by xtable 1.7-4 package
+% Wed Dec 24 16:32:15 2014
+\begin{table}[ht]
+\centering
+\begin{tabular}{rrrr}
+  \hline
+ & X\_Sq & DF & pvalue \\ 
+  \hline
+X-squared & 1.59 & 3 & 0.6615 \\ 
+   \hline
+\end{tabular}
+\end{table}Conclusion: $\chi^2$ test {\bf{fails to reject}} the null hypothesis of independence between ``transfer child'' and living arrangement. 
+
+\newpage
+\subsection*{Multinomial logit model}
+A multinomial logit model was fit, with the following factors. Each of the factors were individually taken out of the model and a $\chi ^2$ test was conducted to evaulate its inclusion in the model. Below is the table of all the variables in the model, in descending order of their predictive power of the outcome variable (ascending order of their p values). 
+
+
+% latex table generated in R 3.1.1 by xtable 1.7-4 package
+% Wed Dec 24 16:32:20 2014
+\begin{table}[ht]
+\centering
+\begin{tabular}{lr}
+  \hline
+Variable & pValue \\ 
+  \hline
+depend\_child\_max & 0.000000 \\ 
+  poor\_health & 0.000000 \\ 
+  religion & 0.000000 \\ 
+  caste & 0.000000 \\ 
+  work\_adult & 0.000001 \\ 
+  own\_asset & 0.000147 \\ 
+  disability\_mx & 0.000192 \\ 
+  transfer\_child\_max & 0.306809 \\ 
+   \hline
+\end{tabular}
+\end{table}
+The conclusion is consistent with all the previous $\chi^2$ tests. Only ``transfer\_child\_max'' is not significant. 
 \\
-  
+Comments:
+\begin{enumerate}
+\item This is just the first modeling attempt. I can include other variables if you are interested
+\item This model does not account for interaction between the factors
+\item There could be multicollinearity as well
+\item In multinomial models, with many multi-level factors as independent variables, extracting and interpreting the coefficients is often very tricky. Once you de 
+\end{enumerate}
 \end{document}

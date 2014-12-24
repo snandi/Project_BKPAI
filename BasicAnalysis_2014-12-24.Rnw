@@ -1,5 +1,5 @@
 %\documentclass[11pt]{extarticle} %extarticle for fontsizes other than 10, 11 And 12
-\documentclass[11p]{article}
+\documentclass[11pt]{article}
 
 %%%%%%%%%%%%%%%%%%%%%%%% Packages %%%%%%%%%%%%%%%%%%%%%%%%
 \usepackage{amscd}
@@ -113,12 +113,12 @@ rm(list=objects(all.names=TRUE))
 ## Run Header files                                                   ##
 ########################################################################
 #Filename.Header <- paste('~/RScripts/HeaderFile_Nandi.R', sep='')
-Filename.Header <- paste('S:/RScripts/HeaderFile_Nandi.R', sep='')
+Filename.Header <- paste('~/RScripts/HeaderFile_Nandi.R', sep='')
 source(Filename.Header)
 #RScriptPath <- '~/Project_BKPAI/RScripts_BKPAI/'
-RScriptPath <- 'S:/Stat/Stat_Consulting/Project_BKPAI/RScripts_BKPAI/'
+RScriptPath <- '~/Stat/Stat_Consulting/Project_BKPAI/RScripts_BKPAI/'
 source(paste(RScriptPath, 'fn_Library_BKPAI.R', sep=''))
-ProjectPath <- 'S:/Stat/Stat_Consulting/Project_BKPAI/'
+ProjectPath <- '~/Stat/Stat_Consulting/Project_BKPAI/'
 
 ########################################################################
 ## Data Input                                                         ##
@@ -164,9 +164,10 @@ Varlist <- c('uid',
 )
 #lapply(X=Varlist, FUN=function(var){if(!(var %in% colnames(Data))) print(var)})
 Data1 <- Data[,Varlist]
-
+levels(Data1$live_arrange_max)[4] <- 'with children'
 @ 
 \subsection*{Wealth quintile}
+\begin{center}
 <<echo=FALSE, fig=TRUE>>=
 ## wealth_quintile
 Table.wealth_quintile <- prop.table(table(Data1$wealth_quintile,Data1$live_arrange_max),1)
@@ -179,10 +180,222 @@ Plot1 <- qplot(x=Var.1, y=value, data=Table.wealth_quintile.r, color=Living) +
   #legend.title = element_text(label='Living', size=14)
 print(Plot1)
 @
+\end{center}
+Interpretation of this figure is that $60\%$ people in wealth quintile 1, live with children, whereas about $85\%$ people in wealth quintiles 4 and 5 live with children.
+
+\newpage
+\subsection*{Poor Health}
+Frequency of the Poor health variable:
+<<echo=FALSE>>=
+print(table(Data1$poor_health))
+@
+Now, lets check for independence between Poor health and living arrangement:
+<<echo=FALSE>>=
+print(table(Data1$poor_health,Data1$live_arrange_max))
+@
 
 <<echo=FALSE, results=tex>>=
-Time1 <- Sys.time()
+Test.poor_health <- chisq.test(table(Data1$poor_health,Data1$live_arrange_max))
+xtable(as.data.frame(cbind(X_Sq=Test.poor_health$statistic, 
+                           DF=Test.poor_health$parameter, 
+                           pvalue=Test.poor_health$p.value)), digits=c(0, 2, 0, 3))
+
+#print(fisher.test(table(Data1$poor_health,Data1$live_arrange_max)))
 @
+Conclusion: $\chi^2$ test rejects the null hypothesis of independence between poor health and living arrangement. 
+
+\newpage
+\subsection*{Total Income}
+\begin{center}
+<<echo=FALSE, fig=TRUE>>=
+qplot(x=live_arrange_max, y=log(row_total_income + 1), data=Data1) + 
+  geom_boxplot() + 
+  xlab(label = 'Living Arrangement') + ylab('log(row_total_income)')
+@
+\end{center}
+Since the variability in the $row\_total\_income$ is too high, the boxplot of the $\log$ of the variable is displayed. The living arrangement with ``spouse-only'' seems to have highest average income. There are lot of aging adults with no income in the first and fourth type of living arrangement.
+
+
+\newpage
+\subsection*{Depend Child ($depend\_child\_mx$)}
+<<echo=FALSE, results=tex>>=
+xtable(t(table(Data1$depend_child_mx)))
+xtable(table(Data1$depend_child_mx, Data1$live_arrange_max))
+@
+Now, lets check for independence between depend child and living arrangement:
+<<echo=FALSE, results=tex>>=
+Test.depend_child_mx <- chisq.test(table(Data1$depend_child_mx, Data1$live_arrange_max))
+xtable(cbind(X_Sq=Test.depend_child_mx$statistic, 
+                           DF=Test.depend_child_mx$parameter, 
+                           pvalue=Test.depend_child_mx$p.value), digits=c(0, 2, 0, 3))
+@
+
+\begin{center}
+<<echo=FALSE, fig=TRUE>>=
+qplot(live_arrange_max, data=Data1, geom="bar", fill=depend_child_mx)
+@
+\end{center}
+
+\newpage
+\subsection*{Own Asset}
+
+<<echo=FALSE, results=tex>>=
+Data1$own_asset <- as.factor(Data1$own_asset)
+xtable(t(table(Data1$own_asset)))
+xtable(table(Data1$live_arrange_max, Data1$own_asset))
+Test.own_asset <- chisq.test(table(Data1$own_asset, Data1$live_arrange_max))
+xtable(as.data.frame(cbind(X_Sq=Test.own_asset$statistic, 
+                           DF=Test.own_asset$parameter, 
+                           pvalue=Test.own_asset$p.value)), digits=c(0, 2, 0, 3))
+@
+Conclusion: $\chi^2$ test rejects the null hypothesis of independence between asset ownership and living arrangement. 
+
+\newpage
+\subsection*{religion}
+<<echo=FALSE, results=tex>>=
+xtable(t(table(Data1$religion)), digits=0)
+xtable(prop.table(x = table(Data1$religion, Data1$live_arrange_max), margin=1))
+Test.religion <- chisq.test(table(Data1$religion, Data1$live_arrange_max))
+xtable(as.data.frame(cbind(X_Sq=Test.religion$statistic, 
+                           DF=Test.religion$parameter, 
+                           pvalue=Test.religion$p.value)), digits=c(0, 2, 0, 4))
+@
+Conclusion: $\chi^2$ test rejects the null hypothesis of independence between religion and living arrangement. 
+
+\newpage
+\subsection*{Disability ($disability\_mx$)}
+<<echo=FALSE, results=tex>>=
+xtable(t(table(Data1$disability_mx)), digits=0)
+xtable(table(Data1$live_arrange_max, Data1$disability_mx))
+Test.disability_mx <- chisq.test(table(Data1$disability_mx, Data1$live_arrange_max))
+xtable(as.data.frame(cbind(X_Sq=Test.disability_mx$statistic, 
+                           DF=Test.disability_mx$parameter, 
+                           pvalue=Test.disability_mx$p.value)), digits=c(0, 2, 0, 4))
+@
+Conclusion: $\chi^2$ test rejects the null hypothesis of independence between disability and living arrangement. 
+
+\newpage
+\subsection*{Work Adult}
+<<echo=FALSE, results=tex>>=
+xtable(t(table(Data1$work_adult)), digits=0)
+xtable(table(Data1$live_arrange_max, Data1$work_adult))
+Test.work_adult <- chisq.test(table(Data1$work_adult, Data1$live_arrange_max))
+xtable(as.data.frame(cbind(X_Sq=Test.work_adult$statistic, 
+                           DF=Test.work_adult$parameter, 
+                           pvalue=Test.work_adult$p.value)), digits=c(0, 2, 0, 4))
+
+@
+Conclusion: $\chi^2$ test rejects the null hypothesis of independence between working adult and living arrangement. 
+
+\newpage
+\subsection*{Transfer child}
+<<echo=FALSE, results=tex>>=
+xtable(t(table(Data1$transfer_child_mx)), digits=0)
+xtable(table(Data1$live_arrange_max, Data1$transfer_child_mx))
+Test.transfer_child_mx <- chisq.test(table(Data1$transfer_child_mx, Data1$live_arrange_max))
+xtable(as.data.frame(cbind(X_Sq=Test.transfer_child_mx$statistic, 
+                           DF=Test.transfer_child_mx$parameter, 
+                           pvalue=Test.transfer_child_mx$p.value)), digits=c(0, 2, 0, 4))
+
+@
+Conclusion: $\chi^2$ test {\bf{fails to reject}} the null hypothesis of independence between ``transfer child'' and living arrangement. 
+
+\newpage
+\subsection*{Multinomial logit model}
+A multinomial logit model was fit, with the following factors. Each of the factors were individually taken out of the model and a $\chi ^2$ test was conducted to evaulate its inclusion in the model. Below is the table of all the variables in the model, in descending order of their predictive power of the outcome variable (ascending order of their p values). 
+
+<<echo=FALSE, results=hide>>=
+########################################################################
+## First Multinomial model                                            ##
+########################################################################
+PValues <- NULL
+Model1 <- multinom(live_arrange_max ~ poor_health + depend_child_mx + own_asset + transfer_child_mx + disability_mx + work_adult + caste + religion, data=Data1)
+
+Model1.1 <- multinom(live_arrange_max ~ depend_child_mx + own_asset + transfer_child_mx + disability_mx + work_adult + caste + religion, 
+                   data=Data1)
+PValues <- rbind(PValues, cbind(Variable='poor_health', 
+                               pValue=pchisq(deviance(Model1.1) - deviance(Model1), 
+                                             Model1$edf - Model1.1$edf, lower=F))
+)
+
+Model1.2 <- multinom(live_arrange_max ~ poor_health + own_asset + 
+                       transfer_child_mx + disability_mx + work_adult + caste + religion, 
+                     data=Data1)
+# pchisq(deviance(Model1.2) - deviance(Model1), Model1$edf - Model1.2$edf, lower=F)
+PValues <- rbind(PValues, cbind(Variable='depend_child_max', 
+                                pValue=pchisq(deviance(Model1.2) - deviance(Model1), 
+                                              Model1$edf - Model1.2$edf, lower=F)))
+
+Model1.3 <- multinom(live_arrange_max ~ poor_health + depend_child_mx + 
+                       transfer_child_mx + disability_mx + work_adult + caste + religion, 
+                     data=Data1)
+# pchisq(deviance(Model1.3) - deviance(Model1), 
+#        Model1$edf - Model1.3$edf, lower=F)
+PValues <- rbind(PValues, cbind(Variable='own_asset', 
+                                pValue=pchisq(deviance(Model1.3) - deviance(Model1), 
+                                              Model1$edf - Model1.3$edf, lower=F)))
+
+Model1.4 <- multinom(live_arrange_max ~ poor_health + depend_child_mx + own_asset +
+                       disability_mx + work_adult + caste + religion, 
+                     data=Data1)
+# pchisq(deviance(Model1.4) - deviance(Model1), 
+#        Model1$edf - Model1.4$edf, lower=F)
+PValues <- rbind(PValues, cbind(Variable='transfer_child_max', 
+                                pValue=pchisq(deviance(Model1.4) - deviance(Model1), 
+                                              Model1$edf - Model1.4$edf, lower=F)))
+
+Model1.5 <- multinom(live_arrange_max ~ poor_health + depend_child_mx + own_asset +
+                       work_adult + caste + religion, 
+                     data=Data1)
+# pchisq(deviance(Model1.5) - deviance(Model1), 
+#        Model1$edf - Model1.5$edf, lower=F)
+PValues <- rbind(PValues, cbind(Variable='disability_mx', 
+                                pValue=pchisq(deviance(Model1.5) - deviance(Model1), 
+                                              Model1$edf - Model1.5$edf, lower=F)))
+
+Model1.6 <- multinom(live_arrange_max ~ poor_health + depend_child_mx + own_asset +
+                       disability_mx + caste + religion, 
+                     data=Data1)
+# pchisq(deviance(Model1.6) - deviance(Model1), 
+#        Model1$edf - Model1.6$edf, lower=F)
+PValues <- rbind(PValues, cbind(Variable='work_adult', 
+                                pValue=pchisq(deviance(Model1.6) - deviance(Model1), 
+                                              Model1$edf - Model1.6$edf, lower=F)))
+
+Model1.7 <- multinom(live_arrange_max ~ poor_health + depend_child_mx + own_asset +
+                       disability_mx + work_adult + religion, 
+                     data=Data1)
+# pchisq(deviance(Model1.7) - deviance(Model1), 
+#        Model1$edf - Model1.7$edf, lower=F)
+PValues <- rbind(PValues, cbind(Variable='caste', 
+                                pValue=pchisq(deviance(Model1.7) - deviance(Model1), 
+                                              Model1$edf - Model1.7$edf, lower=F)))
+
+Model1.8 <- multinom(live_arrange_max ~ poor_health + depend_child_mx + own_asset +
+                       disability_mx + work_adult + caste, 
+                     data=Data1)
+# pchisq(deviance(Model1.8) - deviance(Model1), 
+#        Model1$edf - Model1.8$edf, lower=F)
+PValues <- rbind(PValues, cbind(Variable='religion', 
+                                pValue=pchisq(deviance(Model1.8) - deviance(Model1), 
+                                              Model1$edf - Model1.8$edf, lower=F)))
+
+PValues <- as.data.frame(PValues, stringsAsFactors=F)
+PValues$pValue <- as.numeric(PValues$pValue)
+#PValues[order(PValues$pValue),]
+@
+
+<<echo=FALSE, results=tex>>=
+print(xtable(PValues[order(PValues$pValue),], digits=6), include.rownames=FALSE)
+@
+
+The conclusion is consistent with all the previous $\chi^2$ tests. Only ``transfer\_child\_max'' is not significant. 
 \\
-  
+Comments:
+\begin{enumerate}
+\item This is just the first modeling attempt. I can include other variables if you are interested
+\item This model does not account for interaction between the factors
+\item There could be multicollinearity as well
+\item In multinomial models, with many multi-level factors as independent variables, extracting and interpreting the coefficients is often very tricky. Once you de 
+\end{enumerate}
 \end{document}
