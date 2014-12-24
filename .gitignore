@@ -9,4 +9,6 @@ backup_linux
 *.Rdata
 .Rproj.user
 *.Rproj
+*.jpeg
+*.jpg
 

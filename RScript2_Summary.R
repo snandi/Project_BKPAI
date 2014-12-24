@@ -90,11 +90,17 @@ qplot(x=live_arrange_max, y=hhweight, data=Data1) + geom_boxplot()
 
 ## wealth_quintile
 summary(Data1$wealth_quintile)
-barplot(table(Data1$wealth_quintile))
 Table.wealth_quintile <- prop.table(table(Data1$wealth_quintile,Data1$live_arrange_max),1)
 Table.wealth_quintile.r <- melt(Table.wealth_quintile, id=rownames(Table.wealth_quintile))
-qplot(x=Var.1, y=value, data=Table.wealth_quintile.r, color=Var.2) + 
-  geom_line(size=1.2)
+names(Table.wealth_quintile.r)[2] <- 'Living'
+Plot1 <- qplot(x=Var.1, y=value, data=Table.wealth_quintile.r, color=Living) + 
+  geom_line(size=1.2) + 
+  xlab(label = 'Wealth Quintile') + ylab('Percentage') + 
+  ggtitle('Living arrangement and Wealth quintile')
+#legend.title = element_text(label='Living', size=14)
+jpeg("Wealth_Quintile.jpg")
+Plot1
+dev.off()
 
 ## poor_health
 summary(Data1$poor_health)
