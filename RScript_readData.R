@@ -84,8 +84,8 @@ Varlist <- c('uid',
              'HH_head60',
              'caste',
              'religion'
-             )
- 
+)
+
 lapply(X=Varlist, FUN=function(var){if(!(var %in% colnames(Data))) print(var)})
 
 Data.Subset <- Data[,Varlist]

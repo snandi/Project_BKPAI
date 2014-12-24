@@ -7,3 +7,6 @@ backup_linux
 *.txt
 *.xlsx
 *.Rdata
+.Rproj.user
+*.Rproj
+
