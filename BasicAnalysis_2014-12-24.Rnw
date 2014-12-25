@@ -396,6 +396,6 @@ Comments:
 \item This is just the first modeling attempt. I can include other variables if you are interested
 \item This model does not account for interaction between the factors
 \item There could be multicollinearity as well
-\item In multinomial models, with many multi-level factors as independent variables, extracting and interpreting the coefficients is often very tricky. Once you de 
+\item In multinomial models, with many multi-level factors as independent variables, extracting and interpreting the coefficients is often very tricky. Once you decide which variables (factors) to use, send me a list to re-generate this result for. 
 \end{enumerate}
 \end{document}
