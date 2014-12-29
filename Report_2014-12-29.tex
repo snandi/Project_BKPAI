@@ -1,0 +1,137 @@
+%\documentclass[11pt]{extarticle} %extarticle for fontsizes other than 10, 11 And 12
+\documentclass[11pt]{article}
+
+%%%%%%%%%%%%%%%%%%%%%%%% Packages %%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage{amscd}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{amsxtra}
+\usepackage{bbold}
+%\usepackage{bigints}
+\usepackage{color}
+\usepackage{dsfont}
+\usepackage{enumerate}
+\usepackage[mathscr]{eucal}
+%\usepackage{fancyhdr}
+\usepackage{float}
+%\usepackage{fullpage} %% Dont use this for beamer presentations
+\usepackage{geometry}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{indentfirst}
+\usepackage{latexsym}
+\usepackage{listings}
+\usepackage{lscape}
+%\usepackage{mathtools}
+\usepackage{microtype}
+\usepackage{natbib}
+\usepackage{pdfpages}
+\usepackage{verbatim}
+\usepackage{wrapfig}
+\usepackage{xargs}
+\DeclareGraphicsExtensions{.pdf,.png,.jpg, .jpeg}
+
+%%%%%%%%%%%%%%%%%%%%%%%% Commands %%%%%%%%%%%%%%%%%%%%%%%%
+\newcommand{\Sup}{\textsuperscript}
+\newcommand{\Exp}{\mathds{E}}
+\newcommand{\Prob}{\mathds{P}}
+\newcommand{\Z}{\mathds{Z}}
+\newcommand{\Ind}{\mathds{1}}
+\newcommand{\A}{\mathcal{A}}
+\newcommand{\F}{\mathcal{F}}
+%\newcommand{\G}{\mathcal{G}}
+\newcommand{\I}{\mathcal{I}}
+\newcommand{\be}{\begin{equation}}
+\newcommand{\ee}{\end{equation}}
+\newcommand{\bes}{\begin{equation*}}
+\newcommand{\ees}{\end{equation*}}
+\newcommand{\union}{\bigcup}
+\newcommand{\intersect}{\bigcap}
+\newcommand{\Ybar}{\overline{Y}}
+\newcommand{\ybar}{\bar{y}}
+\newcommand{\Xbar}{\overline{X}}
+\newcommand{\xbar}{\bar{x}}
+\newcommand{\betahat}{\hat{\beta}}
+\newcommand{\Yhat}{\widehat{Y}}
+\newcommand{\yhat}{\hat{y}}
+\newcommand{\Xhat}{\widehat{X}}
+\newcommand{\xhat}{\hat{x}}
+\newcommand{\E}[1]{\operatorname{E}\left[ #1 \right]}
+%\newcommand{\Var}[1]{\operatorname{Var}\left( #1 \right)}
+\newcommand{\Var}{\operatorname{Var}}
+\newcommand{\Cov}[2]{\operatorname{Cov}\left( #1,#2 \right)}
+\newcommand{\N}[2][1=\mu, 2=\sigma^2]{\operatorname{N}\left( #1,#2 \right)}
+\newcommand{\bp}[1]{\left( #1 \right)}
+\newcommand{\bsb}[1]{\left[ #1 \right]}
+\newcommand{\bcb}[1]{\left\{ #1 \right\}}
+\newcommand*{\permcomb}[4][0mu]{{{}^{#3}\mkern#1#2_{#4}}}
+\newcommand*{\perm}[1][-3mu]{\permcomb[#1]{P}}
+\newcommand*{\comb}[1][-1mu]{\permcomb[#1]{C}}
+
+%%%%%%%%%%%%%%%%%%% To change the margins and stuff %%%%%%%%%%%%%%%%%%%
+\geometry{left=1in, right=1in, top=1in, bottom=0.8in}
+%\setlength{\voffset}{0.5in}
+%\setlength{\hoffset}{-0.4in}
+%\setlength{\textwidth}{7.6in}
+%\setlength{\textheight}{10in}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\usepackage{Sweave}
+\begin{document}
+\input{Report_2014-12-29-concordance}
+
+\bibliographystyle{plain}  %Choose a bibliograhpic style
+
+\title{Analyzing the BKPAI Data}
+\author{Subhrangshu Nandi\\
+  Stat 760: Multivariate Analysis\\
+  Project Report \\
+  nandi@stat.wisc.edu}
+\date{November 25, 2014}
+%\date{}
+
+%\maketitle
+
+\begin{center}
+{\Large{Analyzing the BKPAI Data}}\\
+%Subhrangshu Nandi\\
+%Stat 760: Multivariate Analysis\\
+%Project Proposal\\
+December 24, 2014
+\end{center}
+
+% latex table generated in R 3.0.1 by xtable 1.7-1 package
+% Mon Dec 29 01:14:35 2014
+\begin{table}[ht]
+\centering
+\begin{tabular}{rrrrr}
+  \hline
+ & no & yes & no\_percent & yes\_percent \\ 
+  \hline
+HH\_live\_son\_mx & 2480 & 5440 & 31.31 & 68.69 \\ 
+  HH\_live\_daughter\_mx & 6706 & 1214 & 84.67 & 15.33 \\ 
+  spouse\_Sfamily\_mx & 5406 & 2514 & 68.26 & 31.74 \\ 
+  spouse\_Dfamily\_mx & 7227 & 693 & 91.25 & 8.75 \\ 
+  spouse\_SD\_mx & 7456 & 464 & 94.14 & 5.86 \\ 
+  Fnospouse\_SD & 7805 & 115 & 98.55 & 1.45 \\ 
+  Fnospouse\_SorD & 6759 & 1161 & 85.34 & 14.66 \\ 
+  F\_nosps\_DIL2\_r & 7852 & 68 & 99.14 & 0.86 \\ 
+  mother\_notmarried & 6687 & 1233 & 84.43 & 15.57 \\ 
+  HH\_MIL & 7815 & 105 & 98.67 & 1.33 \\ 
+  HH\_SIL & 7915 & 5 & 99.94 & 0.06 \\ 
+  Mnospouse\_SD & 7879 & 41 & 99.48 & 0.52 \\ 
+  Mnospouse\_SorD & 7504 & 416 & 94.75 & 5.25 \\ 
+  M\_nosps\_DIL2\_r & 7903 & 17 & 99.79 & 0.21 \\ 
+  father\_notmarried & 7775 & 145 & 98.17 & 1.83 \\ 
+  HH\_FIL & 7911 & 9 & 99.89 & 0.11 \\ 
+  HH\_brother & 7903 & 17 & 99.79 & 0.21 \\ 
+  HH\_BIL & 7916 & 4 & 99.95 & 0.05 \\ 
+  live\_alone & 7355 & 565 & 92.87 & 7.13 \\ 
+  spouseonly1\_mx & 6944 & 976 & 87.68 & 12.32 \\ 
+  F\_grandchild\_r & 7884 & 36 & 99.55 & 0.45 \\ 
+  M\_grandchild\_r & 7912 & 8 & 99.90 & 0.10 \\ 
+   \hline
+\end{tabular}
+\end{table}
+\end{document}
