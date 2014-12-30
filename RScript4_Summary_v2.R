@@ -285,6 +285,8 @@ Data1 <- within(data=Data1,{
   dependence_other_mx <- as.factor(dependence_other_mx)
   own_asset <- as.factor(own_asset)
 })
+levels(Data1$state) <- c('Himachal', 'Punjab', 'Bengal', 'Odisha', 
+                         'Maharashtra', 'Kerala', 'Tamil Nadu')
 
 Col <- 31
 
@@ -304,6 +306,20 @@ fn_printFactorTables <- function(Col, Data1){
                caption=Caption.2,
                digits=c(0, 2, 0, 4)), 
         table.placement='H', include.rownames=FALSE)  
+
+  names(Table.pct.r)[2] <- 'Living'
+  Plot <- qplot(x=Var.1, y=value, data=Table.pct.r, geom="bar", 
+                fill=Living, stat='identity') + 
+    xlab(label = Colname) + ylab('Percentage') + 
+    ggtitle(Caption.1)
+  print(Plot)
 }
 
-fn_printFactorTables(Col=31, Data1=Data1)
+fn_printFactorTables(Col=3, Data1=Data1)
+Table.pct <- prop.table(table(Data1[,Col],Data1$live_arrange_max),1)
+Table.pct.r <- melt(Table.pct, id=rownames(Table.pct))
+
+
+
+
+

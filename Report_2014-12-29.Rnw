@@ -257,7 +257,7 @@ Table4$yes_percent <- Table4$liv * 100/7920
 print(xtable(Table4, digits = c(0, 0, 0, 2, 2)), table.placement='H')
 @
 \subsection*{Relationship between individual factors and the response}
-<<echo=FALSE, results=tex>>=
+<<echo=FALSE, results=tex, fig=TRUE>>=
 Varlist <- c('live_arrange_max',
              'wealth_quintile',
              'state',
@@ -300,13 +300,18 @@ Data1 <- within(data=Data1,{
   dependence_other_mx <- as.factor(dependence_other_mx)
   own_asset <- as.factor(own_asset)
 })
-Col <- 31
+levels(Data1$state) <- c('Himachal', 'Punjab', 'Bengal', 'Odisha', 
+                         'Maharashtra', 'Kerala', 'Tamil Nadu')
 
 for(Col in 2:ncol(Data1)){
   Colname <- gsub(pattern = "_", replacement = " ", x = colnames(Data1)[Col])
   if(is.factor(Data1[,Col])){
     print(paste("{\bf{", Colname, "}}", sep=""))
-    fn_printFactorTables(Col=Col, Data1=Data1)
+    Plot <- fn_printFactorTables(Col=Col, Data1=Data1)
+    print("\newline")
+    #print("\begin{figure}")
+    print(Plot)
+    #print("\end{figure}")
   }
 }
 #print(colnames(Data1)[Col])

@@ -46,5 +46,13 @@ fn_printFactorTables <- function(Col, Data1){
                caption=Caption.2,
                digits=c(0, 2, 0, 4)), 
         table.placement='H', include.rownames=FALSE)  
+
+  names(Table.pct.r)[2] <- 'Living'
+
+  Plot <- qplot(x=Var.1, y=value, data=Table.pct.r, geom="bar", 
+                fill=Living, stat='identity') + 
+    xlab(label = Colname) + ylab('Percentage') + 
+    ggtitle(paste(Colname, 'and Living Arrangement'))
+  return(Plot)
 }
 
