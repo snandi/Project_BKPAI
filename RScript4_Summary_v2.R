@@ -74,6 +74,40 @@ Varlist <- c('live_arrange_max',
              'religion'
 )
 
+VarNames <- c('Living Arrangement',
+             'Wealth Quintile',
+             'State',
+             'Household type',
+             'hhpers',
+             'Poor Health',
+             'Total Income',
+             'contribute_max',
+             'At least one dependent on children',
+             'Other elderly financialy dependent',
+             'Owns Asset',
+             'Asset Transferred to Child',
+             'asset_nominate_mx',
+             'At least one elderly with disability',
+             'Female elderly with disability',
+             'Male elderly with disability',
+             'Avg ADL needs of elderly',
+             'At least one elderly with ADL needs',
+             'Max IADL needed by elderly',
+             'Avg IADL needs of elderly',
+             'either_disb',
+             'HH with working elderly',
+             'Highest education of elderly',
+             'Avg education of elderly',
+             'Total adults between 17 and 60',
+             'Total education of all adults',
+             'Avg education of all adults',
+             'Total number of working adults',
+             'HH headed by adults above 60',
+             'HH headed by male above 60',
+             'Caste',
+             'Religion'
+)
+
 # Varlist <- c('uid',
 #              'hhweight',
 #              'wealth_quintile',
@@ -104,8 +138,10 @@ Varlist <- c('live_arrange_max',
 #              'caste',
 #              'religion'
 # )
-lapply(X=Varlist, FUN=function(var){if(!(var %in% colnames(Data))) print(var)})
 
+lapply(X=Varlist, FUN=function(var){if(!(var %in% colnames(Data))) print(var)})
+VarMap <- VarNames
+names(VarMap) <- Varlist
 ####################################################################
 ## All possible combinations of living arrangements               ##
 ####################################################################
