@@ -1,0 +1,751 @@
+%\documentclass[11pt]{extarticle} %extarticle for fontsizes other than 10, 11 And 12
+\documentclass[11pt]{article}
+
+%%%%%%%%%%%%%%%%%%%%%%%% Packages %%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage{amscd}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{amsxtra}
+\usepackage{bbold}
+%\usepackage{bigints}
+\usepackage{color}
+\usepackage{dsfont}
+\usepackage{enumerate}
+\usepackage[mathscr]{eucal}
+%\usepackage{fancyhdr}
+\usepackage{float}
+%\usepackage{fullpage} %% Dont use this for beamer presentations
+\usepackage{geometry}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{indentfirst}
+\usepackage{latexsym}
+\usepackage{listings}
+\usepackage{lscape}
+%\usepackage{mathtools}
+\usepackage{microtype}
+\usepackage{natbib}
+\usepackage{pdfpages}
+\usepackage{verbatim}
+\usepackage{wrapfig}
+\usepackage{xargs}
+\DeclareGraphicsExtensions{.pdf,.png,.jpg, .jpeg}
+
+%%%%%%%%%%%%%%%%%%%%%%%% Commands %%%%%%%%%%%%%%%%%%%%%%%%
+\newcommand{\Sup}{\textsuperscript}
+\newcommand{\Exp}{\mathds{E}}
+\newcommand{\Prob}{\mathds{P}}
+\newcommand{\Z}{\mathds{Z}}
+\newcommand{\Ind}{\mathds{1}}
+\newcommand{\A}{\mathcal{A}}
+\newcommand{\F}{\mathcal{F}}
+%\newcommand{\G}{\mathcal{G}}
+\newcommand{\I}{\mathcal{I}}
+\newcommand{\be}{\begin{equation}}
+\newcommand{\ee}{\end{equation}}
+\newcommand{\bes}{\begin{equation*}}
+\newcommand{\ees}{\end{equation*}}
+\newcommand{\union}{\bigcup}
+\newcommand{\intersect}{\bigcap}
+\newcommand{\Ybar}{\overline{Y}}
+\newcommand{\ybar}{\bar{y}}
+\newcommand{\Xbar}{\overline{X}}
+\newcommand{\xbar}{\bar{x}}
+\newcommand{\betahat}{\hat{\beta}}
+\newcommand{\Yhat}{\widehat{Y}}
+\newcommand{\yhat}{\hat{y}}
+\newcommand{\Xhat}{\widehat{X}}
+\newcommand{\xhat}{\hat{x}}
+\newcommand{\E}[1]{\operatorname{E}\left[ #1 \right]}
+%\newcommand{\Var}[1]{\operatorname{Var}\left( #1 \right)}
+\newcommand{\Var}{\operatorname{Var}}
+\newcommand{\Cov}[2]{\operatorname{Cov}\left( #1,#2 \right)}
+\newcommand{\N}[2][1=\mu, 2=\sigma^2]{\operatorname{N}\left( #1,#2 \right)}
+\newcommand{\bp}[1]{\left( #1 \right)}
+\newcommand{\bsb}[1]{\left[ #1 \right]}
+\newcommand{\bcb}[1]{\left\{ #1 \right\}}
+\newcommand*{\permcomb}[4][0mu]{{{}^{#3}\mkern#1#2_{#4}}}
+\newcommand*{\perm}[1][-3mu]{\permcomb[#1]{P}}
+\newcommand*{\comb}[1][-1mu]{\permcomb[#1]{C}}
+
+%%%%%%%%%%%%%%%%%%% To change the margins and stuff %%%%%%%%%%%%%%%%%%%
+\geometry{left=1in, right=1in, top=1in, bottom=0.8in}
+%\setlength{\voffset}{0.5in}
+%\setlength{\hoffset}{-0.4in}
+%\setlength{\textwidth}{7.6in}
+%\setlength{\textheight}{10in}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\usepackage{Sweave}
+\begin{document}
+\input{Report_2014-12-30-concordance}
+
+\bibliographystyle{plain}  %Choose a bibliograhpic style
+
+\title{Analyzing the BKPAI Data}
+\author{Subhrangshu Nandi\\
+  Stat 760: Multivariate Analysis\\
+  Project Report \\
+  nandi@stat.wisc.edu}
+\date{November 25, 2014}
+%\date{}
+
+%\maketitle
+
+\begin{center}
+{\Large{Analyzing the BKPAI Data}}\\
+%Subhrangshu Nandi\\
+%Stat 760: Multivariate Analysis\\
+%Project Proposal\\
+December 24, 2014
+\end{center}
+Below is a table of the different types of living arrangements:\\
+% latex table generated in R 3.0.1 by xtable 1.7-1 package
+% Tue Dec 30 12:02:13 2014
+\begin{table}[ht]
+\centering
+\begin{tabular}{rrrrr}
+  \hline
+ & no & yes & no\_percent & yes\_percent \\ 
+  \hline
+Living with son or son's family & 2480 & 5440 & 31.31 & 68.69 \\ 
+  Living with daughter or daughter's family & 6706 & 1214 & 84.67 & 15.33 \\ 
+  Living with son and spouse and family & 5406 & 2514 & 68.26 & 31.74 \\ 
+  Living with daughter and spouse and family & 7227 & 693 & 91.25 & 8.75 \\ 
+  Elderly spouse with both son and daughter & 7456 & 464 & 94.14 & 5.86 \\ 
+  No spouse, living with son and daughter & 7805 & 115 & 98.55 & 1.45 \\ 
+  No spouse, living with son OR daughter & 6759 & 1161 & 85.34 & 14.66 \\ 
+  Female, No spouse, only DIL, no son & 7852 & 68 & 99.14 & 0.86 \\ 
+  Unmarried mother 60 and up & 6687 & 1233 & 84.43 & 15.57 \\ 
+  Unmarried mother-in-law 60 and up & 7815 & 105 & 98.67 & 1.33 \\ 
+  Unmarried sister-in-law 60 and up & 7915 & 5 & 99.94 & 0.06 \\ 
+  Male elderly, no spouse, live son and daughter & 7879 & 41 & 99.48 & 0.52 \\ 
+  Male elderly, no spouse, live son OR daughter & 7504 & 416 & 94.75 & 5.25 \\ 
+  Male, No spouse, only DIL, no son & 7903 & 17 & 99.79 & 0.21 \\ 
+  Unmarried father 60 and up & 7775 & 145 & 98.17 & 1.83 \\ 
+  Unmarried father-in-law 60 and up & 7911 & 9 & 99.89 & 0.11 \\ 
+  Unmarried brother 60 and up & 7903 & 17 & 99.79 & 0.21 \\ 
+  Unmarried brother-in-law 60 and up & 7916 & 4 & 99.95 & 0.05 \\ 
+  Elderly living alone & 7355 & 565 & 92.87 & 7.13 \\ 
+  Living only with spouse & 6944 & 976 & 87.68 & 12.32 \\ 
+  Female, living only with grandchildren & 7884 & 36 & 99.55 & 0.45 \\ 
+  Male, living only with grandchildren & 7912 & 8 & 99.90 & 0.10 \\ 
+   \hline
+\end{tabular}
+\end{table}\newline
+Below is a breakdown of all the living arrangements where the aging adults live with a son or a son's family:\\
+% latex table generated in R 3.0.1 by xtable 1.7-1 package
+% Tue Dec 30 12:02:14 2014
+\begin{table}[ht]
+\centering
+\begin{tabular}{rrrrr}
+  \hline
+ & no & yes & no\_percent & yes\_percent \\ 
+  \hline
+HH head male $<$ 60, with elderly & 6477 & 1443 & 81.78 & 18.22 \\ 
+  HH head adult $>$ 60, with son & 4002 & 3918 & 50.53 & 49.47 \\ 
+  HH head female, spouse $>$ 60, with son & 7898 & 22 & 99.72 & 0.28 \\ 
+  HH head male, spouse $>$ 60, with son & 7914 & 6 & 99.92 & 0.08 \\ 
+  HH head DIL & 7895 & 25 & 99.68 & 0.32 \\ 
+  HH head male $>$ 60, with elderly & 7823 & 97 & 98.78 & 1.22 \\ 
+  HH head adult $>$ 60, with adopted son & 7913 & 7 & 99.91 & 0.09 \\ 
+   \hline
+\end{tabular}
+\end{table}\newline
+Below is a breakdown of all the living arrangements where the aging adults live with a daughter or a daughter's family:\\
+% latex table generated in R 3.0.1 by xtable 1.7-1 package
+% Tue Dec 30 12:02:37 2014
+\begin{table}[H]
+\centering
+\begin{tabular}{rrrrr}
+  \hline
+ & no & yes & no\_percent & yes\_percent \\ 
+  \hline
+daughter & 7862 & 58 & 99.27 & 0.73 \\ 
+  daughter2 & 6874 & 1046 & 86.79 & 13.21 \\ 
+  D2W & 7908 & 12 & 99.85 & 0.15 \\ 
+  D2M & 7917 & 3 & 99.96 & 0.04 \\ 
+  daughterhusband & 7821 & 99 & 98.75 & 1.25 \\ 
+  daughter60 & 7917 & 3 & 99.96 & 0.04 \\ 
+  daughter\_adopt & 7917 & 3 & 99.96 & 0.04 \\ 
+   \hline
+\end{tabular}
+\end{table}\newline
+Breakdown of people living alone:
+% latex table generated in R 3.0.1 by xtable 1.7-1 package
+% Tue Dec 30 12:02:38 2014
+\begin{table}[H]
+\centering
+\begin{tabular}{rrrrr}
+  \hline
+ & not living alone & living alone & no\_percent & yes\_percent \\ 
+  \hline
+Female & 7446 & 474 & 94.02 & 5.98 \\ 
+  Male & 7829 & 91 & 98.85 & 1.15 \\ 
+   \hline
+\end{tabular}
+\end{table}\subsection*{Relationship between individual factors and the response}
+[1] "{\bf{state}}"
+% latex table generated in R 3.0.1 by xtable 1.7-1 package
+% Tue Dec 30 12:02:42 2014
+\begin{table}[H]
+\centering
+\begin{tabular}{rrrrr}
+  \hline
+ & others & alone & spouse only & with children \\ 
+  \hline
+Himachal & 4.42 & 5.75 & 12.57 & 77.26 \\ 
+  Punjab & 4.33 & 3.64 & 9.74 & 82.28 \\ 
+  Bengal & 4.26 & 7.59 & 8.15 & 80.00 \\ 
+  Odisha & 2.13 & 4.00 & 10.31 & 83.56 \\ 
+  Maharashtra & 1.80 & 6.16 & 10.01 & 82.04 \\ 
+  Kerala & 6.72 & 4.48 & 10.39 & 78.41 \\ 
+  Tamil Nadu & 3.48 & 17.17 & 23.72 & 55.63 \\ 
+   \hline
+\end{tabular}
+\caption{Frequency table between state and Living Arrangement} 
+\end{table}
+% latex table generated in R 3.0.1 by xtable 1.7-1 package
+% Tue Dec 30 12:02:42 2014
+\begin{table}[H]
+\centering
+\begin{tabular}{rrr}
+  \hline
+X\_Sq & DF & pvalue \\ 
+  \hline
+524.57 & 18 & 0.0000 \\ 
+   \hline
+\end{tabular}
+\caption{Test of independence between state and Living Arrangement} 
+\end{table}
+[1] "\newline"
+[1] "{\bf{htype}}"
+% latex table generated in R 3.0.1 by xtable 1.7-1 package
+% Tue Dec 30 12:02:52 2014
+\begin{table}[H]
+\centering
+\begin{tabular}{rrrrr}
+  \hline
+ & others & alone & spouse only & with children \\ 
+  \hline
+rural & 3.68 & 7.62 & 13.99 & 74.72 \\ 
+  urban & 4.01 & 6.62 & 10.58 & 78.79 \\ 
+   \hline
+\end{tabular}
+\caption{Frequency table between htype and Living Arrangement} 
+\end{table}
+% latex table generated in R 3.0.1 by xtable 1.7-1 package
+% Tue Dec 30 12:02:52 2014
+\begin{table}[H]
+\centering
+\begin{tabular}{rrr}
+  \hline
+X\_Sq & DF & pvalue \\ 
+  \hline
+26.27 & 3 & 0.0000 \\ 
+   \hline
+\end{tabular}
+\caption{Test of independence between htype and Living Arrangement} 
+\end{table}
+[1] "\newline"
+[1] "{\bf{poor health}}"
+% latex table generated in R 3.0.1 by xtable 1.7-1 package
+% Tue Dec 30 12:03:00 2014
+\begin{table}[H]
+\centering
+\begin{tabular}{rrrrr}
+  \hline
+ & others & alone & spouse only & with children \\ 
+  \hline
+healthy adults & 3.04 & 7.37 & 13.57 & 76.02 \\ 
+  unhealthy adults & 4.45 & 6.93 & 11.43 & 77.19 \\ 
+   \hline
+\end{tabular}
+\caption{Frequency table between poor health and Living Arrangement} 
+\end{table}
+% latex table generated in R 3.0.1 by xtable 1.7-1 package
+% Tue Dec 30 12:03:01 2014
+\begin{table}[H]
+\centering
+\begin{tabular}{rrr}
+  \hline
+X\_Sq & DF & pvalue \\ 
+  \hline
+18.14 & 3 & 0.0004 \\ 
+   \hline
+\end{tabular}
+\caption{Test of independence between poor health and Living Arrangement} 
+\end{table}
+[1] "\newline"
+[1] "{\bf{contribute max}}"
+% latex table generated in R 3.0.1 by xtable 1.7-1 package
+% Tue Dec 30 12:03:09 2014
+\begin{table}[H]
+\centering
+\begin{tabular}{rrrrr}
+  \hline
+ & others & alone & spouse only & with children \\ 
+  \hline
+no & 3.17 & 5.73 & 4.99 & 86.11 \\ 
+  yes & 4.28 & 8.05 & 17.10 & 70.57 \\ 
+   \hline
+\end{tabular}
+\caption{Frequency table between contribute max and Living Arrangement} 
+\end{table}
+% latex table generated in R 3.0.1 by xtable 1.7-1 package
+% Tue Dec 30 12:03:10 2014
+\begin{table}[H]
+\centering
+\begin{tabular}{rrr}
+  \hline
+X\_Sq & DF & pvalue \\ 
+  \hline
+305.02 & 3 & 0.0000 \\ 
+   \hline
+\end{tabular}
+\caption{Test of independence between contribute max and Living Arrangement} 
+\end{table}
+[1] "\newline"
+[1] "{\bf{depend child mx}}"
+% latex table generated in R 3.0.1 by xtable 1.7-1 package
+% Tue Dec 30 12:03:18 2014
+\begin{table}[H]
+\centering
+\begin{tabular}{rrrrr}
+  \hline
+ & others & alone & spouse only & with children \\ 
+  \hline
+no & 6.18 & 11.93 & 22.25 & 59.64 \\ 
+  yes & 2.14 & 3.64 & 5.10 & 89.12 \\ 
+   \hline
+\end{tabular}
+\caption{Frequency table between depend child mx and Living Arrangement} 
+\end{table}
+% latex table generated in R 3.0.1 by xtable 1.7-1 package
+% Tue Dec 30 12:03:18 2014
+\begin{table}[H]
+\centering
+\begin{tabular}{rrr}
+  \hline
+X\_Sq & DF & pvalue \\ 
+  \hline
+947.39 & 3 & 0.0000 \\ 
+   \hline
+\end{tabular}
+\caption{Test of independence between depend child mx and Living Arrangement} 
+\end{table}
+[1] "\newline"
+[1] "{\bf{dependence other mx}}"
+% latex table generated in R 3.0.1 by xtable 1.7-1 package
+% Tue Dec 30 12:03:27 2014
+\begin{table}[H]
+\centering
+\begin{tabular}{rrrrr}
+  \hline
+ & others & alone & spouse only & with children \\ 
+  \hline
+0 & 2.62 & 6.33 & 12.45 & 78.59 \\ 
+  1 & 19.75 & 17.62 & 10.68 & 51.96 \\ 
+  2 & 0.00 & 0.00 & 0.00 & 100.00 \\ 
+   \hline
+\end{tabular}
+\caption{Frequency table between dependence other mx and Living Arrangement} 
+\end{table}
+% latex table generated in R 3.0.1 by xtable 1.7-1 package
+% Tue Dec 30 12:03:27 2014
+\begin{table}[H]
+\centering
+\begin{tabular}{rrr}
+  \hline
+X\_Sq & DF & pvalue \\ 
+  \hline
+542.37 & 6 & 0.0000 \\ 
+   \hline
+\end{tabular}
+\caption{Test of independence between dependence other mx and Living Arrangement} 
+\end{table}
+[1] "\newline"
+[1] "{\bf{own asset}}"
+% latex table generated in R 3.0.1 by xtable 1.7-1 package
+% Tue Dec 30 12:03:35 2014
+\begin{table}[H]
+\centering
+\begin{tabular}{rrrrr}
+  \hline
+ & others & alone & spouse only & with children \\ 
+  \hline
+0 & 4.62 & 7.60 & 7.73 & 80.05 \\ 
+  1 & 3.65 & 7.02 & 13.41 & 75.91 \\ 
+   \hline
+\end{tabular}
+\caption{Frequency table between own asset and Living Arrangement} 
+\end{table}
+% latex table generated in R 3.0.1 by xtable 1.7-1 package
+% Tue Dec 30 12:03:36 2014
+\begin{table}[H]
+\centering
+\begin{tabular}{rrr}
+  \hline
+X\_Sq & DF & pvalue \\ 
+  \hline
+38.38 & 3 & 0.0000 \\ 
+   \hline
+\end{tabular}
+\caption{Test of independence between own asset and Living Arrangement} 
+\end{table}
+[1] "\newline"
+[1] "{\bf{transfer child mx}}"
+% latex table generated in R 3.0.1 by xtable 1.7-1 package
+% Tue Dec 30 12:03:43 2014
+\begin{table}[H]
+\centering
+\begin{tabular}{rrrrr}
+  \hline
+ & others & alone & spouse only & with children \\ 
+  \hline
+no & 3.82 & 7.06 & 12.37 & 76.76 \\ 
+  yes & 4.24 & 8.47 & 11.53 & 75.76 \\ 
+   \hline
+\end{tabular}
+\caption{Frequency table between transfer child mx and Living Arrangement} 
+\end{table}
+% latex table generated in R 3.0.1 by xtable 1.7-1 package
+% Tue Dec 30 12:03:44 2014
+\begin{table}[H]
+\centering
+\begin{tabular}{rrr}
+  \hline
+X\_Sq & DF & pvalue \\ 
+  \hline
+1.59 & 3 & 0.6615 \\ 
+   \hline
+\end{tabular}
+\caption{Test of independence between transfer child mx and Living Arrangement} 
+\end{table}
+[1] "\newline"
+[1] "{\bf{asset nominate mx}}"
+% latex table generated in R 3.0.1 by xtable 1.7-1 package
+% Tue Dec 30 12:03:51 2014
+\begin{table}[H]
+\centering
+\begin{tabular}{rrrrr}
+  \hline
+ & others & alone & spouse only & with children \\ 
+  \hline
+no & 3.75 & 7.82 & 12.43 & 76.00 \\ 
+  yes & 4.33 & 3.23 & 11.71 & 80.73 \\ 
+   \hline
+\end{tabular}
+\caption{Frequency table between asset nominate mx and Living Arrangement} 
+\end{table}
+% latex table generated in R 3.0.1 by xtable 1.7-1 package
+% Tue Dec 30 12:03:52 2014
+\begin{table}[H]
+\centering
+\begin{tabular}{rrr}
+  \hline
+X\_Sq & DF & pvalue \\ 
+  \hline
+33.83 & 3 & 0.0000 \\ 
+   \hline
+\end{tabular}
+\caption{Test of independence between asset nominate mx and Living Arrangement} 
+\end{table}
+[1] "\newline"
+[1] "{\bf{disability mx}}"
+% latex table generated in R 3.0.1 by xtable 1.7-1 package
+% Tue Dec 30 12:03:59 2014
+\begin{table}[H]
+\centering
+\begin{tabular}{rrrrr}
+  \hline
+ & others & alone & spouse only & with children \\ 
+  \hline
+no & 3.10 & 9.13 & 16.59 & 71.18 \\ 
+  yes & 4.07 & 6.50 & 10.97 & 78.45 \\ 
+   \hline
+\end{tabular}
+\caption{Frequency table between disability mx and Living Arrangement} 
+\end{table}
+% latex table generated in R 3.0.1 by xtable 1.7-1 package
+% Tue Dec 30 12:03:59 2014
+\begin{table}[H]
+\centering
+\begin{tabular}{rrr}
+  \hline
+X\_Sq & DF & pvalue \\ 
+  \hline
+64.65 & 3 & 0.0000 \\ 
+   \hline
+\end{tabular}
+\caption{Test of independence between disability mx and Living Arrangement} 
+\end{table}
+[1] "\newline"
+[1] "{\bf{disability F mx}}"
+% latex table generated in R 3.0.1 by xtable 1.7-1 package
+% Tue Dec 30 12:04:07 2014
+\begin{table}[H]
+\centering
+\begin{tabular}{rrrrr}
+  \hline
+ & others & alone & spouse only & with children \\ 
+  \hline
+no & 3.38 & 5.95 & 15.52 & 75.15 \\ 
+  yes & 4.34 & 8.41 & 8.86 & 78.39 \\ 
+   \hline
+\end{tabular}
+\caption{Frequency table between disability F mx and Living Arrangement} 
+\end{table}
+% latex table generated in R 3.0.1 by xtable 1.7-1 package
+% Tue Dec 30 12:04:07 2014
+\begin{table}[H]
+\centering
+\begin{tabular}{rrr}
+  \hline
+X\_Sq & DF & pvalue \\ 
+  \hline
+95.51 & 3 & 0.0000 \\ 
+   \hline
+\end{tabular}
+\caption{Test of independence between disability F mx and Living Arrangement} 
+\end{table}
+[1] "\newline"
+[1] "{\bf{disability M mx}}"
+% latex table generated in R 3.0.1 by xtable 1.7-1 package
+% Tue Dec 30 12:04:17 2014
+\begin{table}[H]
+\centering
+\begin{tabular}{rrrrr}
+  \hline
+ & others & alone & spouse only & with children \\ 
+  \hline
+no & 3.42 & 10.69 & 8.46 & 77.43 \\ 
+  yes & 4.43 & 2.15 & 17.74 & 75.68 \\ 
+   \hline
+\end{tabular}
+\caption{Frequency table between disability M mx and Living Arrangement} 
+\end{table}
+% latex table generated in R 3.0.1 by xtable 1.7-1 package
+% Tue Dec 30 12:04:17 2014
+\begin{table}[H]
+\centering
+\begin{tabular}{rrr}
+  \hline
+X\_Sq & DF & pvalue \\ 
+  \hline
+336.87 & 3 & 0.0000 \\ 
+   \hline
+\end{tabular}
+\caption{Test of independence between disability M mx and Living Arrangement} 
+\end{table}
+[1] "\newline"
+[1] "{\bf{ADL mx}}"
+% latex table generated in R 3.0.1 by xtable 1.7-1 package
+% Tue Dec 30 12:04:38 2014
+\begin{table}[H]
+\centering
+\begin{tabular}{rrrrr}
+  \hline
+ & others & alone & spouse only & with children \\ 
+  \hline
+no & 3.79 & 7.45 & 12.81 & 75.96 \\ 
+  yes & 4.35 & 3.93 & 7.44 & 84.27 \\ 
+   \hline
+\end{tabular}
+\caption{Frequency table between ADL mx and Living Arrangement} 
+\end{table}
+% latex table generated in R 3.0.1 by xtable 1.7-1 package
+% Tue Dec 30 12:04:39 2014
+\begin{table}[H]
+\centering
+\begin{tabular}{rrr}
+  \hline
+X\_Sq & DF & pvalue \\ 
+  \hline
+32.73 & 3 & 0.0000 \\ 
+   \hline
+\end{tabular}
+\caption{Test of independence between ADL mx and Living Arrangement} 
+\end{table}
+[1] "\newline"
+[1] "{\bf{either disb}}"
+% latex table generated in R 3.0.1 by xtable 1.7-1 package
+% Tue Dec 30 12:05:05 2014
+\begin{table}[H]
+\centering
+\begin{tabular}{rrrrr}
+  \hline
+ & others & alone & spouse only & with children \\ 
+  \hline
+no & 3.10 & 9.13 & 16.59 & 71.18 \\ 
+  yes & 4.07 & 6.50 & 10.97 & 78.45 \\ 
+   \hline
+\end{tabular}
+\caption{Frequency table between either disb and Living Arrangement} 
+\end{table}
+% latex table generated in R 3.0.1 by xtable 1.7-1 package
+% Tue Dec 30 12:05:05 2014
+\begin{table}[H]
+\centering
+\begin{tabular}{rrr}
+  \hline
+X\_Sq & DF & pvalue \\ 
+  \hline
+64.65 & 3 & 0.0000 \\ 
+   \hline
+\end{tabular}
+\caption{Test of independence between either disb and Living Arrangement} 
+\end{table}
+[1] "\newline"
+[1] "{\bf{work adult}}"
+% latex table generated in R 3.0.1 by xtable 1.7-1 package
+% Tue Dec 30 12:05:20 2014
+\begin{table}[H]
+\centering
+\begin{tabular}{rrrrr}
+  \hline
+ & others & alone & spouse only & with children \\ 
+  \hline
+no & 3.94 & 6.95 & 9.84 & 79.27 \\ 
+  yes & 3.58 & 7.59 & 18.42 & 70.41 \\ 
+   \hline
+\end{tabular}
+\caption{Frequency table between work adult and Living Arrangement} 
+\end{table}
+% latex table generated in R 3.0.1 by xtable 1.7-1 package
+% Tue Dec 30 12:05:20 2014
+\begin{table}[H]
+\centering
+\begin{tabular}{rrr}
+  \hline
+X\_Sq & DF & pvalue \\ 
+  \hline
+115.42 & 3 & 0.0000 \\ 
+   \hline
+\end{tabular}
+\caption{Test of independence between work adult and Living Arrangement} 
+\end{table}
+[1] "\newline"
+[1] "{\bf{HH head60}}"
+% latex table generated in R 3.0.1 by xtable 1.7-1 package
+% Tue Dec 30 12:05:37 2014
+\begin{table}[H]
+\centering
+\begin{tabular}{rrrrr}
+  \hline
+ & others & alone & spouse only & with children \\ 
+  \hline
+no & 4.13 & 0.00 & 0.12 & 95.75 \\ 
+  yes & 3.76 & 9.08 & 15.65 & 71.52 \\ 
+   \hline
+\end{tabular}
+\caption{Frequency table between HH head60 and Living Arrangement} 
+\end{table}
+% latex table generated in R 3.0.1 by xtable 1.7-1 package
+% Tue Dec 30 12:05:39 2014
+\begin{table}[H]
+\centering
+\begin{tabular}{rrr}
+  \hline
+X\_Sq & DF & pvalue \\ 
+  \hline
+517.01 & 3 & 0.0000 \\ 
+   \hline
+\end{tabular}
+\caption{Test of independence between HH head60 and Living Arrangement} 
+\end{table}
+[1] "\newline"
+[1] "{\bf{HH headM max}}"
+% latex table generated in R 3.0.1 by xtable 1.7-1 package
+% Tue Dec 30 12:05:58 2014
+\begin{table}[H]
+\centering
+\begin{tabular}{rrrrr}
+  \hline
+ & others & alone & spouse only & with children \\ 
+  \hline
+no & 4.00 & 13.53 & 0.37 & 82.11 \\ 
+  yes & 3.71 & 2.06 & 21.81 & 72.42 \\ 
+   \hline
+\end{tabular}
+\caption{Frequency table between HH headM max and Living Arrangement} 
+\end{table}
+% latex table generated in R 3.0.1 by xtable 1.7-1 package
+% Tue Dec 30 12:05:59 2014
+\begin{table}[H]
+\centering
+\begin{tabular}{rrr}
+  \hline
+X\_Sq & DF & pvalue \\ 
+  \hline
+1112.91 & 3 & 0.0000 \\ 
+   \hline
+\end{tabular}
+\caption{Test of independence between HH headM max and Living Arrangement} 
+\end{table}
+[1] "\newline"
+[1] "{\bf{caste}}"
+% latex table generated in R 3.0.1 by xtable 1.7-1 package
+% Tue Dec 30 12:06:10 2014
+\begin{table}[H]
+\centering
+\begin{tabular}{rrrrr}
+  \hline
+ & others & alone & spouse only & with children \\ 
+  \hline
+SC & 3.80 & 7.28 & 12.18 & 76.74 \\ 
+  ST & 2.44 & 7.32 & 11.95 & 78.29 \\ 
+  OBC & 3.61 & 8.89 & 13.56 & 73.94 \\ 
+  other & 4.23 & 5.54 & 11.39 & 78.84 \\ 
+   \hline
+\end{tabular}
+\caption{Frequency table between caste and Living Arrangement} 
+\end{table}
+% latex table generated in R 3.0.1 by xtable 1.7-1 package
+% Tue Dec 30 12:06:10 2014
+\begin{table}[H]
+\centering
+\begin{tabular}{rrr}
+  \hline
+X\_Sq & DF & pvalue \\ 
+  \hline
+37.72 & 9 & 0.0000 \\ 
+   \hline
+\end{tabular}
+\caption{Test of independence between caste and Living Arrangement} 
+\end{table}
+[1] "\newline"
+[1] "{\bf{religion}}"
+% latex table generated in R 3.0.1 by xtable 1.7-1 package
+% Tue Dec 30 12:06:16 2014
+\begin{table}[H]
+\centering
+\begin{tabular}{rrrrr}
+  \hline
+ & others & alone & spouse only & with children \\ 
+  \hline
+hindu & 3.43 & 7.62 & 13.01 & 75.94 \\ 
+  muslim & 5.74 & 5.59 & 6.03 & 82.65 \\ 
+  christian & 6.34 & 7.46 & 15.67 & 70.52 \\ 
+  sikh & 5.33 & 3.33 & 10.67 & 80.67 \\ 
+  other & 1.00 & 9.00 & 13.00 & 77.00 \\ 
+   \hline
+\end{tabular}
+\caption{Frequency table between religion and Living Arrangement} 
+\end{table}
+% latex table generated in R 3.0.1 by xtable 1.7-1 package
+% Tue Dec 30 12:06:16 2014
+\begin{table}[H]
+\centering
+\begin{tabular}{rrr}
+  \hline
+X\_Sq & DF & pvalue \\ 
+  \hline
+70.39 & 12 & 0.0000 \\ 
+   \hline
+\end{tabular}
+\caption{Test of independence between religion and Living Arrangement} 
+\end{table}
+[1] "\newline"\includegraphics{Report_2014-12-30-005}
+\end{document}

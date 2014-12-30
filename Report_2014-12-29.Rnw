@@ -162,11 +162,34 @@ LivingArr_Variables <- c('HH_live_son_mx',
                          'F_grandchild_r', 
                          'M_grandchild_r'
                          )
+LivingArr_VarNames <- c("Living with son or son's family",
+                        "Living with daughter or daughter's family",
+                        "Living with son and spouse and family",
+                        "Living with daughter and spouse and family",
+                        "Elderly spouse with both son and daughter",
+                        "No spouse, living with son and daughter",
+                        "No spouse, living with son OR daughter",
+                        "Female, No spouse, only DIL, no son",
+                        "Unmarried mother 60 and up",
+                        "Unmarried mother-in-law 60 and up",
+                        "Unmarried sister-in-law 60 and up",
+                        "Male elderly, no spouse, live son and daughter",
+                        "Male elderly, no spouse, live son OR daughter",
+                        "Male, No spouse, only DIL, no son",
+                        "Unmarried father 60 and up",
+                        "Unmarried father-in-law 60 and up",
+                        "Unmarried brother 60 and up",
+                        "Unmarried brother-in-law 60 and up",
+                        "Elderly living alone",
+                        "Living only with spouse",
+                        "Female, living only with grandchildren",
+                        "Male, living only with grandchildren"
+)
 Table1 <- NULL
 for(Var in LivingArr_Variables){
   Table1 <- rbind(Table1, table(Data[,Var]))
 }
-rownames(Table1) <- LivingArr_Variables
+rownames(Table1) <- LivingArr_VarNames
 Table1 <- as.data.frame(Table1)
 Table1$no_percent <- Table1$no * 100/7920
 Table1$yes_percent <- Table1$yes * 100/7920
