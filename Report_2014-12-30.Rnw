@@ -119,6 +119,7 @@ source(Filename.Header)
 RScriptPath <- 'S:/Stat/Stat_Consulting/Project_BKPAI/RScripts_BKPAI/'
 source(paste(RScriptPath, 'fn_Library_BKPAI.R', sep=''))
 ProjectPath <- 'S:/Stat/Stat_Consulting/Project_BKPAI/'
+PlotPath <- 'S:/Stat/Stat_Consulting/Project_BKPAI/Plots/'
 
 ########################################################################
 ## Data Input                                                         ##
@@ -205,13 +206,13 @@ Son_Variables <- c('HH_son_max',
                    'HH_sonwife_mx',
                    'HH_son60_max',
                    'HH_son_adopt_max')
-Son_Varnames <- c('son',
-                  'son2',
-                  'son2W',
-                  'son2M',
-                  'sonwife',
-                  'son60',
-                  'son_adopt')
+Son_Varnames <- c('HH head male < 60, with elderly',
+                  'HH head adult > 60, with son',
+                  'HH head female, spouse > 60, with son',
+                  'HH head male, spouse > 60, with son',
+                  'HH head DIL',
+                  'HH head male > 60, with elderly',
+                  'HH head adult > 60, with adopted son')
 
 Table2 <- NULL
 for(Var in Son_Variables){
@@ -243,13 +244,13 @@ Daughter_Variables <- c('HH_daughter_max',
                         'HH_daughterhusband_i',
                         'HH_daughter60_max',
                         'HH_daughter_adopt2')
-Daughter_Varnames <- c('daughter',
-                       'daughter2',
-                       'D2W',
-                       'D2M',
-                       'daughterhusband',
-                       'daughter60',
-                       'daughter_adopt')
+Daughter_Varnames <- c('HH head female < 60, with elderly',
+                       'HH head adult > 60, with daughter',
+                       'HH head female, spouse > 60, with daughter',
+                       'HH head male, spouse > 60, with daughter',
+                       'HH head Son in law',
+                       'HH head female > 60, with elderly',
+                       'HH head adult > 60, with adopted daughter')
 
 Table3 <- NULL
 for(Var in Daughter_Variables){
@@ -280,7 +281,7 @@ Table4$yes_percent <- Table4$liv * 100/7920
 print(xtable(Table4, digits = c(0, 0, 0, 2, 2)), table.placement='H')
 @
 \subsection*{Relationship between individual factors and the response}
-<<echo=FALSE, results=tex, fig=TRUE>>=
+<<echo=FALSE, results=tex>>=
 Varlist <- c('live_arrange_max',
              'wealth_quintile',
              'state',
@@ -327,16 +328,21 @@ levels(Data1$state) <- c('Himachal', 'Punjab', 'Bengal', 'Odisha',
                          'Maharashtra', 'Kerala', 'Tamil Nadu')
 
 for(Col in 2:ncol(Data1)){
+#for(Col in 2:6){
   Colname <- gsub(pattern = "_", replacement = " ", x = colnames(Data1)[Col])
   if(is.factor(Data1[,Col])){
-    print(paste("{\bf{", Colname, "}}", sep=""))
-    Plot <- fn_printFactorTables(Col=Col, Data1=Data1)
-    print("\newline")
-    #print("\begin{figure}")
-    print(Plot)
-    #print("\end{figure}")
+    cat("{\\bf{", Colname, "}}", sep="")
+    Filename.pdf <- paste(PlotPath, 'Plot_', Col, '.pdf', sep='')
+    fn_printFactorTables(Col=Col, Data1=Data1, PlotPath=PlotPath)
+    cat("\\begin{center}\n")
+    cat("\\begin{figure}[H]\n")
+    cat("\\includegraphics{", Filename.pdf, "}\n\n", sep="")
+    cat("\\end{figure}\n")
+    cat("\\end{center}\n")
+    cat("\\newpage")
   }
 }
 #print(colnames(Data1)[Col])
 @
+
 \end{document}

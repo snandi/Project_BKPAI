@@ -30,7 +30,7 @@ Mode <- function(x) {
 }
 ########################################################################
 
-fn_printFactorTables <- function(Col, Data1){
+fn_printFactorTables <- function(Col, Data1, PlotPath=PlotPath){
   Colname <- gsub(pattern = "_", replacement = " ", x = colnames(Data1)[Col])
   Caption.1 <- paste('Frequency table between', Colname, 'and Living Arrangement')
   Caption.2 <- paste('Test of independence between', Colname, 'and Living Arrangement')
@@ -53,6 +53,14 @@ fn_printFactorTables <- function(Col, Data1){
                 fill=Living, stat='identity') + 
     xlab(label = Colname) + ylab('Percentage') + 
     ggtitle(paste(Colname, 'and Living Arrangement'))
-  return(Plot)
+  
+  Filename.pdf <- paste(PlotPath, 'Plot_', Col, '.pdf', sep='')
+  pdf(file=Filename.pdf, pointsize=6)
+  trellis.par.set(fontsize=list(text=8,points=8))
+  plot(Plot)
+  Filename.jpg <- paste(PlotPath, 'Plot_', Col, '.jpg', sep='')
+  jpeg(file=Filename.jpg)
+  plot(Plot)
+  dev.off()
 }
 

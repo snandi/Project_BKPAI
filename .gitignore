@@ -11,4 +11,5 @@ backup_linux
 *.Rproj
 *.jpeg
 *.jpg
+*.db
 

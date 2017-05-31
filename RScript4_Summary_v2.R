@@ -16,6 +16,7 @@ source(Filename.Header)
 RScriptPath <- 'S:/Stat/Stat_Consulting/Project_BKPAI/RScripts_BKPAI/'
 source(paste(RScriptPath, 'fn_Library_BKPAI.R', sep=''))
 ProjectPath <- 'S:/Stat/Stat_Consulting/Project_BKPAI/'
+PlotPath <- 'S:/Stat/Stat_Consulting/Project_BKPAI/Plots/'
 
 ########################################################################
 ## Data Input                                                         ##
@@ -197,11 +198,35 @@ LivingArr_Variables <- c('HH_live_son_mx',
                          'F_grandchild_r', 
                          'M_grandchild_r'
                          )
+LivingArr_VarNames <- c("Living with son or son's family",
+                        "Living with daughter or daughter's family",
+                        "Living with son and spouse and family",
+                        "Living with daughter and spouse and family",
+                        "Elderly spouse with both son and daughter",
+                        "No spouse, living with son and daughter",
+                        "No spouse, living with son OR daughter",
+                        "Female, No spouse, only DIL, no son",
+                        "Unmarried mother 60 and up",
+                        "Unmarried mother-in-law 60 and up",
+                        "Unmarried sister-in-law 60 and up",
+                        "Male elderly, no spouse, live son and daughter",
+                        "Male elderly, no spouse, live son OR daughter",
+                        "Male, No spouse, only DIL, no son",
+                        "Unmarried father 60 and up",
+                        "Unmarried father-in-law 60 and up",
+                        "Unmarried brother 60 and up",
+                        "Unmarried brother-in-law 60 and up",
+                        "Elderly living alone",
+                        "Living only with spouse",
+                        "Female, living only with grandchildren",
+                        "Male, living only with grandchildren"
+)
+
 Table1 <- NULL
 for(Var in LivingArr_Variables){
   Table1 <- rbind(Table1, table(Data[,Var]))
 }
-rownames(Table1) <- LivingArr_Variables
+rownames(Table1) <- LivingArr_VarNames
 Table1 <- as.data.frame(Table1)
 Table1$no_percent <- Table1$no * 100/7920
 Table1$yes_percent <- Table1$yes * 100/7920
@@ -225,13 +250,13 @@ Son_Variables <- c('HH_son_max',
                    'HH_sonwife_mx',
                    'HH_son60_max',
                    'HH_son_adopt_max')
-Son_Varnames <- c('son',
-                  'son2',
-                  'son2W',
-                  'son2M',
-                  'sonwife',
-                  'son60',
-                  'son_adopt')
+Son_Varnames <- c('HH head male < 60, with elderly',
+                  'HH head adult > 60, with son',
+                  'HH head female, spouse > 60, with son',
+                  'HH head male, spouse > 60, with son',
+                  'HH head DIL',
+                  'HH head male > 60, with elderly',
+                  'HH head adult > 60, with adopted son')
 
 Table2 <- NULL
 for(Var in Son_Variables){
@@ -271,13 +296,13 @@ Daughter_Variables <- c('HH_daughter_max',
                         'HH_daughterhusband_i',
                         'HH_daughter60_max',
                         'HH_daughter_adopt2')
-Daughter_Varnames <- c('daughter',
-                       'daughter2',
-                       'D2W',
-                       'D2M',
-                       'daughterhusband',
-                       'daughter60',
-                       'daughter_adopt')
+Daughter_Varnames <- c('HH head female < 60, with elderly',
+                       'HH head adult > 60, with daughter',
+                       'HH head female, spouse > 60, with daughter',
+                       'HH head male, spouse > 60, with daughter',
+                       'HH head Son in law',
+                       'HH head female > 60, with elderly',
+                       'HH head adult > 60, with adopted daughter')
 
 Table3 <- NULL
 for(Var in Daughter_Variables){
@@ -315,7 +340,6 @@ xtable(Table4, digits = c(0, 0, 0, 2, 2))
 Data1 <- Data[,Varlist]
 levels(Data1$live_arrange_max)[4] <- 'with children'
 
-str(Data1)
 Data1 <- within(data=Data1,{
   state <- as.factor(state)
   dependence_other_mx <- as.factor(dependence_other_mx)
@@ -324,38 +348,123 @@ Data1 <- within(data=Data1,{
 levels(Data1$state) <- c('Himachal', 'Punjab', 'Bengal', 'Odisha', 
                          'Maharashtra', 'Kerala', 'Tamil Nadu')
 
-Col <- 31
+str(Data1)
 
-fn_printFactorTables <- function(Col, Data1){
-  Colname <- gsub(pattern = "_", replacement = " ", x = colnames(Data1)[Col])
-  Caption.1 <- paste('Frequency table between', Colname, 'and Living Arrangement')
-  Caption.2 <- paste('Test of independence between', Colname, 'and Living Arrangement')
-  
-  Table.pct <- prop.table(table(Data1[,Col],Data1$live_arrange_max),1)
-  print(xtable(Table.pct, caption=Caption.1), table.placement='H')
-  Table.pct.r <- melt(Table.pct, id=rownames(Table.pct))
-  #table(Data1$poor_health,Data1$live_arrange_max)
-  Test <- chisq.test(table(Data1[,Col],Data1$live_arrange_max))
-  print(xtable(as.data.frame(cbind(X_Sq=Test$statistic, 
-                                   DF=Test$parameter, 
-                                   pvalue=Test$p.value)),
-               caption=Caption.2,
-               digits=c(0, 2, 0, 4)), 
-        table.placement='H', include.rownames=FALSE)  
+Col <- 2
 
-  names(Table.pct.r)[2] <- 'Living'
-  Plot <- qplot(x=Var.1, y=value, data=Table.pct.r, geom="bar", 
-                fill=Living, stat='identity') + 
-    xlab(label = Colname) + ylab('Percentage') + 
-    ggtitle(Caption.1)
-  print(Plot)
-}
+# for(Col in 2:ncol(Data1)){
+#   #for(Col in 2:6){
+#   Colname <- gsub(pattern = "_", replacement = " ", x = colnames(Data1)[Col])
+#   if(is.factor(Data1[,Col])){
+#     cat("{\\bf{", Colname, "}}", sep="")
+#     Filename.pdf <- paste(PlotPath, 'Plot_', Col, '.pdf', sep='')
+#     fn_printFactorTables(Col=Col, Data1=Data1, PlotPath=PlotPath)
+#     cat("\\begin{center}\n")
+#     cat("\\begin{figure}[H]\n")
+#     cat("\\includegraphics{", Filename.pdf, "}\n\n", sep="")
+#     cat("\\end{figure}\n")
+#     cat("\\end{center}\n")
+#     cat("\\newpage")
+#   }
+# }
 
-fn_printFactorTables(Col=3, Data1=Data1)
-Table.pct <- prop.table(table(Data1[,Col],Data1$live_arrange_max),1)
-Table.pct.r <- melt(Table.pct, id=rownames(Table.pct))
+## wealth_quintile
+summary(Data1$wealth_quintile)
+Col <- 2
+Table <- prop.table(table(Data1[,Col],Data1$live_arrange_max),1)
+Table.r <- melt(Table, id=rownames(Table))
+names(Table.r)[2] <- 'Living'
+Plot1 <- qplot(x=Var.1, y=value, data=Table.r, color=Living) + 
+  geom_line(size=1.2) + 
+  xlab(label = 'Wealth Quintile') + ylab('Percentage') + 
+  ggtitle('Living arrangement and Wealth quintile')
+#legend.title = element_text(label='Living', size=14)
+# jpeg("Wealth_Quintile.jpg")
+Filename.jpg <- paste(PlotPath, 'Plot_wealth_quintile', '.jpg', sep='')
+jpeg(file=Filename.jpg)
+plot(Plot1)
+dev.off()
 
+## hhpers
+summary(Data1$hhpers)
+Col <- 5
+Table <- prop.table(table(Data1[,Col],Data1$live_arrange_max),1)
+Table.r <- melt(Table, id=rownames(Table))
+names(Table.r)[2] <- 'Living'
+Plot2 <- qplot(x=live_arrange_max, y=Data1[,Col], data=Data1) + 
+  geom_boxplot() + 
+  xlab(label = 'Living Arrangement') + ylab('hhpers') +
+  ggtitle('Living arrangement and hhpers')
+#legend.title = element_text(label='Living', size=14)
+Filename.jpg <- paste(PlotPath, 'Plot_hhpers', '.jpg', sep='')
+jpeg(file=Filename.jpg)
+plot(Plot2)
+dev.off()
 
+## row_total_income
+summary(Data1$row_total_income)
+Plot3 <- qplot(x=live_arrange_max, y=log(row_total_income + 1), data=Data1) + 
+  geom_boxplot() + 
+  xlab(label = 'Living Arrangement') + ylab('log(row_total_income)')
 
+Filename.jpg <- paste(PlotPath, 'Plot_row_total_income', '.jpg', sep='')
+jpeg(file=Filename.jpg)
+plot(Plot3)
+dev.off()
 
+## IADL_mx
+summary(Data1$IADL_mx)
+Plot4 <- qplot(x=live_arrange_max, y=log(IADL_mx + .1), data=Data1) + 
+  geom_boxplot() + 
+  xlab(label = 'Living Arrangement') + ylab('log(IADL_mx)')
 
+Filename.jpg <- paste(PlotPath, 'Plot_IADL_mx', '.jpg', sep='')
+jpeg(file=Filename.jpg)
+plot(Plot4)
+dev.off()
+
+## avg_IADL
+summary(Data1$avg_IADL)
+Plot5 <- qplot(x=live_arrange_max, y=log(avg_IADL + .1), data=Data1) + 
+  geom_boxplot() + 
+  xlab(label = 'Living Arrangement') + ylab('log(avg_IADL)')
+# jpeg("Row_Total_Income.jpg")
+Plot5
+dev.off()
+
+## edu_avg_r
+summary(Data1$edu_avg_r)
+Plot6 <- qplot(x=live_arrange_max, y=edu_avg_r, data=subset(Data1, edu_avg_r<40)) + 
+  geom_boxplot() + 
+  xlab(label = 'Living Arrangement') + ylab('edu_avg_r')
+# jpeg("Row_Total_Income.jpg")
+Plot6
+dev.off()
+
+# Data1.1 <- subset(Data1, edu_avg_r < 40)
+# Table <- prop.table(table(Data1.1$edu_avg_r,Data1.1$live_arrange_max),1)
+# Table.r <- melt(Table, id=rownames(Table))
+# names(Table.r)[2] <- 'Living'
+# Plot7 <- qplot(x=Var.1, y=value, data=Table.r, color=Living) + 
+#   geom_line(size=1.2) + 
+#   xlab(label = 'Wealth Quintile') + ylab('Percentage') + 
+#   ggtitle('Living arrangement and Wealth quintile')
+# Plot7
+
+## adult_hh_mx
+summary(Data1$adult_hh_mx)
+Plot8 <- qplot(x=live_arrange_max, y=adult_hh_mx, data=Data1) + 
+  geom_boxplot() + 
+  xlab(label = 'Living Arrangement') + ylab('adult_hh_mx')
+# jpeg("Row_Total_Income.jpg")
+Plot8
+dev.off()
+
+## total_work_adultR
+summary(Data1$total_work_adultR)
+Plot9 <- qplot(x=live_arrange_max, y=log(total_work_adultR + .1), data=Data1) + 
+  geom_boxplot() + 
+  xlab(label = 'Living Arrangement') + ylab('log(total_work_adultR)')
+# jpeg("Row_Total_Income.jpg")
+Plot9
+dev.off()
